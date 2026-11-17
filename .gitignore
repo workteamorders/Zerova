@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+*.vars
+.dev.vars
+node_modules/
+.next/
+out/
+cache/
+broadcast/
+.DS_Store
