@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Enso painting (illustrative drawing)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="display: block; line-height: 0">
+<svg viewBox="0 0 1000 1250" width="{{w}}" height="{{h}}" role="img" aria-label="{{alt}}" style="display: block">
+<rect x="0" y="0" width="1000" height="1250" fill="{{paper}}"></rect>
+<sc-for list="{{fibers}}" as="f" hint-placeholder-count="4">
+<line x1="{{f.x1}}" y1="{{f.y1}}" x2="{{f.x2}}" y2="{{f.y2}}" stroke="{{shade}}" stroke-width="1.4" stroke-opacity="0.18"></line>
+</sc-for>
+<sc-for list="{{specks}}" as="k" hint-placeholder-count="4">
+<circle cx="{{k.x}}" cy="{{k.y}}" r="{{k.r}}" fill="{{shade}}" fill-opacity="0.3"></circle>
+</sc-for>
+<path d="{{washD}}" fill="{{wash}}" fill-opacity="0.26"></path>
+<sc-for list="{{halos}}" as="s" hint-placeholder-count="3">
+<path d="{{s.d}}" fill="{{ink}}" fill-opacity="0.1"></path>
+</sc-for>
+<sc-for list="{{bodies}}" as="s" hint-placeholder-count="3">
+<path d="{{s.d}}" fill="{{ink}}" fill-opacity="{{s.op}}"></path>
+</sc-for>
+<sc-for list="{{heads}}" as="s" hint-placeholder-count="3">
+<path d="{{s.d}}" fill="{{ink}}" fill-opacity="0.2"></path>
+</sc-for>
+<sc-for list="{{bristles}}" as="b" hint-placeholder-count="6">
+<path d="{{b.d}}" fill="none" stroke="{{paper}}" stroke-width="{{b.sw}}" stroke-opacity="{{b.op}}" stroke-dasharray="{{b.dash}}" stroke-linecap="round"></path>
+</sc-for>
+<sc-for list="{{hairs}}" as="b" hint-placeholder-count="6">
+<path d="{{b.d}}" fill="none" stroke="{{ink}}" stroke-width="{{b.sw}}" stroke-opacity="{{b.op}}" stroke-dasharray="{{b.dash}}" stroke-linecap="round"></path>
+</sc-for>
+<sc-for list="{{spatter}}" as="d" hint-placeholder-count="2">
+<circle cx="{{d.x}}" cy="{{d.y}}" r="{{d.r}}" fill="{{ink}}" fill-opacity="0.75"></circle>
+</sc-for>
+<circle cx="500" cy="560" r="10" fill="{{ink}}"></circle>
+<sc-if value="{{completed}}" hint-placeholder-val="{{ false }}">
+<rect x="20" y="20" width="960" height="1210" fill="none" stroke="{{seal}}" stroke-width="3" stroke-opacity="0.9"></rect>
+<rect x="32" y="32" width="936" height="1186" fill="none" stroke="{{seal}}" stroke-width="1.5" stroke-opacity="0.9"></rect>
+<g transform="rotate(-4 800 1010)">
+<rect x="743" y="953" width="114" height="114" fill="none" stroke="{{seal}}" stroke-width="6"></rect>
+<sc-for list="{{sealCells}}" as="c" hint-placeholder-count="4">
+<rect x="{{c.x}}" y="{{c.y}}" width="{{c.s}}" height="{{c.s}}" fill="{{seal}}"></rect>
+</sc-for>
+</g>
+</sc-if>
+<text x="60" y="1146" font-family="serif" font-size="40" fill="{{ink}}">{{title}}</text>
+<text x="60" y="1198" font-family="sans-serif" font-size="26" fill="{{ink}}" fill-opacity="0.8">No. {{no}}</text>
+<text x="940" y="1198" text-anchor="end" font-family="sans-serif" font-size="26" fill="{{ink}}" fill-opacity="0.8">{{strokeLabel}}</text>
+</svg>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"paper":{"editor":null,"default":"#F2ECDF"},"ink":{"editor":null,"default":"#1B2432"},"wash":{"editor":null,"default":"#CBD0D6"},"seal":{"editor":null,"default":"#B8321E"},"shade":{"editor":null,"default":"#8B93A1"},"seed":{"editor":null,"default":7},"gesture":{"editor":null,"default":-1},"strokes":{"editor":null,"default":6},"completed":{"editor":null,"default":false},"name":{"editor":null,"default":"Example Coin"},"symbol":{"editor":null,"default":"EXMPL"},"no":{"editor":null,"default":"7"},"w":{"editor":null,"default":400},"$preview":{"width":400,"height":500}}'>
+class Component extends DCLogic {
+  rng(seed) {
+    let a = Math.floor(seed) >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  renderVals() {
+    const p = this.props;
+    const seed = Number(p.seed ?? 7);
+    const gp = p.gesture === undefined || p.gesture === null ? -1 : Number(p.gesture);
+    const gi = (gp >= 0 ? gp : seed) % 8;
+    const n = Math.max(0, Math.min(12, Math.round(Number(p.strokes ?? 0))));
+    const done = p.completed === true || p.completed === 'true';
+    const w = Number(p.w ?? 400);
+    // Eight invented gestures: each sets a different brush physics.
+    const G = [
+      { w0: 36, w1: 32, dry: 0.18, jit: 1.2, ecc: 0.99, tilt: 0.05, pulse: 0.04, wob: 2, splat: 1 },
+      { w0: 76, w1: 10, dry: 0.55, jit: 2.2, ecc: 0.96, tilt: 0.2, pulse: 0.08, wob: 4, splat: 3 },
+      { w0: 18, w1: 52, dry: 0.35, jit: 2.0, ecc: 0.92, tilt: 0.38, pulse: 0.1, wob: 6, splat: 2 },
+      { w0: 46, w1: 30, dry: 0.85, jit: 4.5, ecc: 0.97, tilt: 0.15, pulse: 0.2, wob: 5, splat: 4 },
+      { w0: 40, w1: 48, dry: 0.3, jit: 2.5, ecc: 0.98, tilt: 0.1, pulse: 0.5, wob: 3, splat: 2 },
+      { w0: 26, w1: 22, dry: 0.4, jit: 2.2, ecc: 0.97, tilt: 0.12, pulse: 0.12, wob: 11, splat: 1 },
+      { w0: 88, w1: 72, dry: 0.95, jit: 3, ecc: 0.95, tilt: 0.22, pulse: 0.1, wob: 4, splat: 0 },
+      { w0: 98, w1: 58, dry: 0.12, jit: 1.6, ecc: 0.96, tilt: 0.1, pulse: 0.06, wob: 3, splat: 2 }
+    ];
+    const g = G[gi];
+    const r = this.rng(seed * 2654435761 + 12345);
+    const cx = 500, cy = 560, R = 306;
+    const a0 = r() * Math.PI * 2;
+    const tilt = (r() - 0.5) * 2 * g.tilt;
+    const ph1 = r() * 6.28, ph2 = r() * 6.28;
+    const ct = Math.cos(tilt), st = Math.sin(tilt);
+    const f1 = (v) => Math.round(v * 10) / 10;
+    const M = 20, T = 240, L = T + 3;
+    // smoothed noise arrays, one per side (periodic through modulo)
+    const noise = () => {
+      const raw = [];
+      for (let j = 0; j < T; j++) raw.push(r() - 0.5);
+      const o = [];
+      for (let j = 0; j < T; j++) o.push((raw[(j + T - 1) % T] + 2 * raw[j] + raw[(j + 1) % T]) / 4 * 2);
+      return o;
+    };
+    const eo = noise(), ei = noise(), lo = noise();
+    const pt = (a, rad) => {
+      const x = rad * Math.cos(a), y = rad * g.ecc * Math.sin(a);
+      return [cx + x * ct - y * st, cy + x * st + y * ct];
+    };
+    const wid = [], rc = [], ang = [];
+    for (let j = 0; j < L; j++) {
+      const u = j / T;
+      const uc = Math.min(1, u);
+      const su = ((u * 12) % 1);
+      const bump = 1 + 0.12 * Math.exp(-su * 7);
+      const base = g.w0 + (g.w1 - g.w0) * uc;
+      wid.push(base * (1 + g.pulse * Math.sin(u * 6.283 * 3 + ph1)) * bump);
+      rc.push(R + g.wob * Math.sin(u * 6.283 * 2 + ph2) + lo[j % T] * g.wob * 0.8);
+      ang.push(a0 + u * 6.283185);
+    }
+    const ss = (x) => { const c = Math.max(0, Math.min(1, x)); return c * c * (3 - 2 * c); };
+    const lastI = n - 1;
+    const tap = (j) => {
+      let f = 0.18 + 0.82 * ss(j / 7);
+      if (n > 0 && n < 12) {
+        const je = lastI * M + M + 1;
+        f = Math.min(f, 0.14 + 0.86 * ss((je - j) / 7));
+      }
+      return f;
+    };
+    const slice = (i) => {
+      const j0 = i * M, j1 = Math.min(L - 1, i * M + M + 1);
+      return [j0, j1];
+    };
+    const poly = (j0, j1, grow, jscale) => {
+      const outer = [], inner = [];
+      for (let j = j0; j <= j1; j++) {
+        const hw = (wid[j] * tap(j)) / 2 + grow;
+        outer.push(pt(ang[j], rc[j] + hw + eo[j % T] * g.jit * jscale));
+        inner.push(pt(ang[j], rc[j] - hw + ei[j % T] * g.jit * jscale));
+      }
+      const ring = outer.concat(inner.slice().reverse());
+      return 'M' + ring.map((q) => f1(q[0]) + ',' + f1(q[1])).join(' L') + ' Z';
+    };
+    const line = (j0, j1, f, extra) => {
+      const pts = [];
+      for (let j = j0; j <= j1; j++) pts.push(pt(ang[j], rc[j] + f * wid[j] * tap(j) + extra));
+      return 'M' + pts.map((q) => f1(q[0]) + ',' + f1(q[1])).join(' L');
+    };
+    const bodies = [], halos = [], heads = [], bristles = [], hairs = [];
+    for (let i = 0; i < 12; i++) {
+      const [j0, j1] = slice(i);
+      bodies.push({ i, d: poly(j0, j1, 0, 1), op: i % 2 === 0 ? 0.94 : 0.89 });
+      halos.push({ i, d: poly(j0, j1, 5, 1.7) });
+      heads.push({ i, d: poly(j0, Math.min(j1, j0 + 6), 0, 1) });
+      const nb = 5 + Math.round(g.dry * 4);
+      for (let b = 0; b < nb; b++) {
+        const f = -0.4 + (0.8 * b) / (nb - 1) + (r() - 0.5) * 0.06;
+        const keep = r() < 0.35 + 0.65 * g.dry;
+        const d1 = Math.round(14 + r() * 70), d2 = Math.round(5 + r() * 22 * (0.4 + g.dry));
+        const d3 = Math.round(20 + r() * 80), d4 = Math.round(4 + r() * 18);
+        if (keep) bristles.push({ i, d: line(j0, j1, f, 0), sw: f1(1.1 + r() * 3.2 * (0.5 + g.dry)), op: f1(0.3 + 0.55 * g.dry * r() + 0.2 * r()), dash: d1 + ' ' + d2 + ' ' + d3 + ' ' + d4 });
+      }
+      for (let h = 0; h < 3; h++) {
+        const side = r() > 0.5 ? 0.5 : -0.5;
+        const jj0 = j0 + Math.floor(r() * 6);
+        hairs.push({ i, d: line(jj0, Math.min(j1, jj0 + 12), side, (r() - 0.5) * 6), sw: f1(1 + r() * 1.4), op: f1(0.3 + r() * 0.35), dash: Math.round(20 + r() * 40) + ' ' + Math.round(6 + r() * 16) });
+      }
+    }
+    const dots = [];
+    const dotStrokes = [2, 5, 8, 10, 11];
+    for (let q = 0; q < g.splat; q++) {
+      const i = dotStrokes[q % dotStrokes.length];
+      for (let k = 0; k < 2; k++) {
+        const j = i * M + 8 + k * 4;
+        const side = (q % 2 === 0) ? 1 : -1;
+        const c = pt(ang[j], rc[j] + side * (wid[j] / 2 + 22 + r() * 34));
+        dots.push({ i, x: f1(c[0]), y: f1(c[1]), r: f1(2.5 + r() * 5) });
+      }
+    }
+    // wobbly wash disc, slightly inside the ring so the ring overlaps its edge
+    const wp = [];
+    for (let k = 0; k < 72; k++) {
+      const a = (k / 72) * 6.283185;
+      const c = pt(a, R - 14 + 2.4 * Math.sin(a * 3 + ph1) + 1.6 * Math.sin(a * 7 + ph2));
+      wp.push(f1(c[0]) + ',' + f1(c[1]));
+    }
+    const washD = 'M' + wp.join(' L') + ' Z';
+    const fibers = [];
+    for (let i = 0; i < 16; i++) {
+      const x1 = r() * 1000, y1 = r() * 1250;
+      fibers.push({ x1: f1(x1), y1: f1(y1), x2: f1(x1 + (r() - 0.5) * 120), y2: f1(y1 + (r() - 0.5) * 36) });
+    }
+    const specks = [];
+    for (let i = 0; i < 26; i++) specks.push({ x: f1(r() * 1000), y: f1(r() * 1250), r: f1(0.6 + r() * 1.1) });
+    // seal: geometric motif, mirrored on both axes so it reads as a mark, not letters
+    const q = [r() > 0.4, r() > 0.5, r() > 0.5, r() > 0.35];
+    const sealCells = [];
+    const cs = 22, ox = 743 + 57 - cs * 2, oy = 953 + 57 - cs * 2;
+    const quarter = [[0, 0, q[0]], [1, 0, q[1]], [0, 1, q[2]], [1, 1, q[3]]];
+    quarter.forEach((c) => {
+      if (!c[2]) return;
+      const x = c[0], y = c[1];
+      [[x, y], [3 - x, y], [x, 3 - y], [3 - x, 3 - y]].forEach((m, idx) => {
+        if (idx > 0 && m[0] === quarter[0][0] && false) return;
+        sealCells.push({ x: ox + m[0] * cs, y: oy + m[1] * cs, s: cs - 3 });
+      });
+    });
+    const name = String(p.name ?? '');
+    const symbol = String(p.symbol ?? '');
+    const vis = (a) => a.filter((s) => s.i < n);
+    return {
+      w: w,
+      h: Math.round(w * 1.25),
+      paper: p.paper ?? '#F2ECDF',
+      ink: p.ink ?? '#1B2432',
+      wash: p.wash ?? '#CBD0D6',
+      seal: p.seal ?? '#B8321E',
+      shade: p.shade ?? '#8B93A1',
+      bodies: vis(bodies), halos: vis(halos), heads: vis(heads), bristles: vis(bristles), hairs: vis(hairs),
+      spatter: vis(dots), fibers, specks, washD, sealCells,
+      completed: done,
+      title: name + ' (' + symbol + ')',
+      no: String(p.no ?? '1'),
+      strokeLabel: n + ' of 12 strokes',
+      alt: 'Illustrative ink circle painting, ' + n + ' of 12 strokes drawn' + (done ? ', completion seal stamped' : '') + ', example only'
+    };
+  }
+}
+</script>
+</body>
+</html>

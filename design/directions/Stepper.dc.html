@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Studio stepper (shared, token-driven)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<nav aria-label="Studio progress" style="font-family: {{fb}}; color: {{fg}}">
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px 32px">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+<li aria-current="{{s.cur}}" style="display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 14px; font-weight: {{s.weight}}; color: {{s.color}}">
+<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+<circle cx="12" cy="12" r="9.5" fill="{{s.fill}}" stroke="{{s.stroke}}" stroke-width="2" stroke-dasharray="{{s.dash}}"></circle>
+<sc-if value="{{s.done}}" hint-placeholder-val="{{ false }}"><path d="M7.5 12.4 L10.6 15.4 L16.4 8.8" fill="none" stroke="{{s.tick}}" stroke-width="2"></path></sc-if>
+<sc-if value="{{s.current}}" hint-placeholder-val="{{ false }}"><circle cx="12" cy="12" r="3" fill="{{s.stroke}}"></circle></sc-if>
+</svg>
+<span>{{s.label}}<span style="position: absolute; left: -9999px">{{s.sr}}</span></span>
+</li>
+</sc-for>
+</ol>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"fg":{"editor":null,"default":"#121418"},"dim":{"editor":null,"default":"#565B64"},"accent":{"editor":null,"default":"#C4301C"},"bgc":{"editor":null,"default":"#F5F4EF"},"fb":{"editor":null,"default":"Archivo, sans-serif"},"current":{"editor":null,"default":4},"$preview":{"width":900,"height":56}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const fg = p.fg ?? '#121418', dim = p.dim ?? '#565B64', accent = p.accent ?? '#C4301C', bgc = p.bgc ?? '#F5F4EF';
+    const cur = Number(p.current ?? 4);
+    const labels = ['Name and symbol', 'Gesture and pigment', 'Preview', 'Review and sign'];
+    return {
+      fb: p.fb ?? 'Archivo, sans-serif', fg,
+      steps: labels.map((label, i) => {
+        const k = i + 1;
+        const done = k < cur, current = k === cur;
+        return {
+          label, done, current,
+          sr: done ? ' (done)' : (current ? ' (current step)' : ' (not reached)'),
+          cur: current ? 'step' : undefined,
+          weight: current ? 700 : 500,
+          color: current ? fg : (done ? fg : dim),
+          fill: done ? fg : 'none',
+          stroke: current ? accent : (done ? fg : dim),
+          dash: done || current ? 'none' : '3 3',
+          tick: bgc
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home sections (shared, token-driven)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Schibsted+Grotesk:wght@400..800&family=Familjen+Grotesk:wght@400..700&family=Source+Serif+4:opsz,wght@8..60,300..700&family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="background: {{bg}}; color: {{fg}}; font-family: {{fb}}; font-size: 17px; line-height: 1.6">
+
+<section aria-labelledby="hw" style="border-top: {{bw}}px solid {{strong}}; padding: 96px 48px">
+<div style="max-width: 1184px; margin: 0 auto">
+<h2 id="hw" style="margin: 0 0 8px 0; font-family: {{fd}}; font-weight: {{dw}}; font-stretch: {{dst}}; font-size: 36px; line-height: 1.1; letter-spacing: -0.015em">How a launch works</h2>
+<p style="margin: 0 0 48px 0; max-width: 560px; color: {{dim}}">Three steps in the Studio, one transaction, no account.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="align-self: flex-start; border: 1px solid {{strong}}; background: {{frame}}"><dc-import name="Enso" paper="{{pap}}" ink="{{ink}}" wash="{{wsh}}" seal="{{sel}}" shade="{{shd}}" seed="{{seedA}}" strokes="0" completed="false" name="Quiet Hours" symbol="QUIET" no="7" w="240" hint-size="240px,300px"></dc-import></div>
+<h3 style="margin: 0; font-family: {{fd}}; font-weight: {{dw}}; font-stretch: {{dst}}; font-size: 22px; line-height: 1.2">Choose</h3>
+<p style="margin: 0; color: {{dim}}">Pick a name and a symbol, one of 8 gestures and one of 6 pigments.</p>
+</div>
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="align-self: flex-start; border: 1px solid {{strong}}; background: {{frame}}"><dc-import name="Enso" paper="{{pap}}" ink="{{ink}}" wash="{{wsh}}" seal="{{sel}}" shade="{{shd}}" seed="{{seedA}}" strokes="6" completed="false" name="Quiet Hours" symbol="QUIET" no="7" w="240" hint-size="240px,300px"></dc-import></div>
+<h3 style="margin: 0; font-family: {{fd}}; font-weight: {{dw}}; font-stretch: {{dst}}; font-size: 22px; line-height: 1.2">Preview</h3>
+<p style="margin: 0; color: {{dim}}">See the painting exactly as the contract will draw it, at 0%, 50%, 100% and complete.</p>
+</div>
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="align-self: flex-start; border: 1px solid {{strong}}; background: {{frame}}"><dc-import name="Enso" paper="{{pap}}" ink="{{ink}}" wash="{{wsh}}" seal="{{sel}}" shade="{{shd}}" seed="{{seedA}}" strokes="12" completed="true" name="Quiet Hours" symbol="QUIET" no="7" w="240" hint-size="240px,300px"></dc-import></div>
+<h3 style="margin: 0; font-family: {{fd}}; font-weight: {{dw}}; font-stretch: {{dst}}; font-size: 22px; line-height: 1.2">Launch</h3>
+<p style="margin: 0; color: {{dim}}">One transaction mints 1,000,000,000 tokens, opens the pool, locks the pool position and mints your Enso.</p>
+</div>
+</div>
+<p style="margin: 32px 0 0 0; font-size: 14px; color: {{dim}}"><strong style="color: {{warn}}; letter-spacing: 0.12em">EXAMPLE</strong> Paintings above are illustrations, not launched coins.</p>
+</div>
+</section>
+
+<section aria-labelledby="hg" style="border-top: {{bw}}px solid {{strong}}; padding: 96px 48px">
+<div style="max-width: 1184px; margin: 0 auto">
+<h2 id="hg" style="margin: 0 0 8px 0; font-family: {{fd}}; font-weight: {{dw}}; font-stretch: {{dst}}; font-size: 36px; line-height: 1.1; letter-spacing: -0.015em">What the contract guarantees, and what it does not</h2>
+<p style="margin: 0 0 48px 0; max-width: 600px; color: {{dim}}">Locked liquidity stops the creator from pulling the pool. It does not stop the price from falling.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 420px; min-width: 0">
+<h3 style="margin: 0 0 16px 0; padding-bottom: 12px; border-bottom: {{bw}}px solid {{strong}}; font-family: {{fb}}; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase">Set by the code</h3>
+<ul style="margin: 0; padding: 0; list-style: none">
+<sc-for list="{{guaranteed}}" as="g" hint-placeholder-count="4">
+<li style="display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid {{line}}"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: 0 0 20px; margin-top: 4px"><circle cx="10" cy="10" r="8" fill="none" stroke="{{fg}}" stroke-width="1.8"></circle><path d="M6 10.4 L9 13.2 L14 7.2" fill="none" stroke="{{fg}}" stroke-width="1.8"></path></svg><span>{{g.t}}</span></li>
+</sc-for>
+</ul>
+</div>
+<div style="flex: 1 1 420px; min-width: 0">
+<h3 style="margin: 0 0 16px 0; padding-bottom: 12px; border-bottom: {{bw}}px solid {{strong}}; font-family: {{fb}}; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase">Not promised</h3>
+<ul style="margin: 0; padding: 0; list-style: none">
+<sc-for list="{{notPromised}}" as="g" hint-placeholder-count="4">
+<li style="display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid {{line}}"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: 0 0 20px; margin-top: 4px"><circle cx="10" cy="10" r="8" fill="none" stroke="{{fg}}" stroke-width="1.8" stroke-dasharray="3 2.6"></circle><path d="M10 6 V11" fill="none" stroke="{{fg}}" stroke-width="1.8"></path><circle cx="10" cy="14" r="1.1" fill="{{fg}}"></circle></svg><span>{{g.t}}</span></li>
+</sc-for>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="hz" style="border-top: {{bw}}px solid {{strong}}; padding: 96px 48px">
+<div style="max-width: 1184px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 64px">
+<div style="flex: 1 1 360px; min-width: 0">
+<h2 id="hz" style="margin: 0 0 16px 0; font-family: {{fd}}; font-weight: {{dw}}; font-stretch: {{dst}}; font-size: 36px; line-height: 1.1; letter-spacing: -0.015em">Zero Standard</h2>
+<p style="margin: 0 0 16px 0; color: {{dim}}">Five checks, computed from the chain each time a coin's page is read. Each one says literally what it tests. There is no score and no badge.</p>
+<p style="margin: 0; color: {{dim}}">They describe how a coin is built. They do not rate its value or its security.</p>
+</div>
+<div style="flex: 1 1 560px; min-width: 0">
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 12px; border-bottom: {{bw}}px solid {{strong}}">
+<span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase">Quiet Hours (QUIET)</span>
+<span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; color: {{warn}}">EXAMPLE</span>
+</div>
+<ul style="margin: 0; padding: 0; list-style: none">
+<sc-for list="{{flags}}" as="f" hint-placeholder-count="5">
+<li style="display: flex; flex-wrap: wrap; gap: 4px 24px; padding: 16px 0; border-bottom: 1px solid {{line}}">
+<div style="flex: 1 1 280px; min-width: 0"><div style="font-weight: 700">{{f.name}}</div><div style="color: {{dim}}; font-size: 15px">{{f.meaning}}</div></div>
+<div style="flex: 0 0 auto; text-align: right; font-variant-numeric: tabular-nums"><div style="font-weight: 700">{{f.value}}</div><div style="color: {{dim}}; font-size: 13px">{{f.raw}}</div></div>
+</li>
+</sc-for>
+</ul>
+<div style="margin-top: 24px; padding: 16px 20px; border: {{bw}}px solid {{strong}}">
+<div style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px">Not covered</div>
+<p style="margin: 0; font-size: 15px">The price and the pool's liquidity can fall. A coin can imitate another name. These checks do not show who holds the token, nor the risk in the Uniswap V3 pool or in the chain itself.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="hc" style="border-top: {{bw}}px solid {{strong}}; padding: 96px 48px">
+<div style="max-width: 1184px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 64px">
+<div style="flex: 1 1 560px; min-width: 0">
+<h2 id="hc" style="margin: 0 0 8px 0; font-family: {{fd}}; font-weight: {{dw}}; font-stretch: {{dst}}; font-size: 36px; line-height: 1.1; letter-spacing: -0.015em">Contracts</h2>
+<p style="margin: 0 0 24px 0; color: {{dim}}">Nothing is deployed yet, so no address is shown. Addresses and the on-chain check appear here after deployment.</p>
+<ul style="margin: 0; padding: 0; list-style: none">
+<sc-for list="{{contracts}}" as="c" hint-placeholder-count="4">
+<li style="display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid {{line}}"><span style="font-weight: 600">{{c.name}}</span><span style="color: {{dim}}">Not deployed yet</span></li>
+</sc-for>
+<li style="display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid {{line}}; border-bottom: 1px solid {{line}}"><span style="font-weight: 600">Deployment check</span><span style="color: {{dim}}">Not run</span></li>
+</ul>
+</div>
+<div style="flex: 1 1 360px; min-width: 0; padding: 24px; border: {{bw}}px solid {{strong}}; align-self: flex-start">
+<h3 style="margin: 0 0 12px 0; font-family: {{fb}}; font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase">Read before you launch or trade</h3>
+<ul style="margin: 0; padding: 0 0 0 20px; font-size: 15px">
+<li style="margin-bottom: 8px">No external audit yet.</li>
+<li style="margin-bottom: 8px">Prices can fall close to zero, and a coin can end up worth nothing.</li>
+<li style="margin-bottom: 8px">ZEROVA does not screen launches. Names can imitate brands or other coins.</li>
+<li>Terms and Risk pages are drafts pending legal review.</li>
+</ul>
+</div>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"bg":{"editor":null,"default":"#F5F4EF"},"fg":{"editor":null,"default":"#121418"},"dim":{"editor":null,"default":"#565B64"},"line":{"editor":null,"default":"#BDBDB5"},"strong":{"editor":null,"default":"#121418"},"warn":{"editor":null,"default":"#A3260F"},"frame":{"editor":null,"default":"#F9F8F3"},"fd":{"editor":null,"default":"Archivo, sans-serif"},"fb":{"editor":null,"default":"Archivo, sans-serif"},"dw":{"editor":null,"default":800},"dst":{"editor":null,"default":"100%"},"bw":{"editor":null,"default":2},"pap":{"editor":null,"default":"#F9F8F3"},"ink":{"editor":null,"default":"#0F1319"},"wsh":{"editor":null,"default":"#D5D8DC"},"sel":{"editor":null,"default":"#C4301C"},"shd":{"editor":null,"default":"#8A9099"},"seedA":{"editor":null,"default":33},"$preview":{"width":1280,"height":2400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    return {
+      bg: p.bg ?? '#F5F4EF', fg: p.fg ?? '#121418', dim: p.dim ?? '#565B64', line: p.line ?? '#BDBDB5',
+      strong: p.strong ?? '#121418', warn: p.warn ?? '#A3260F', frame: p.frame ?? '#F9F8F3',
+      fd: p.fd ?? 'Archivo, sans-serif', fb: p.fb ?? 'Archivo, sans-serif',
+      dw: p.dw ?? 800, dst: p.dst ?? '100%', bw: p.bw ?? 2,
+      pap: p.pap ?? '#F9F8F3', ink: p.ink ?? '#0F1319', wsh: p.wsh ?? '#D5D8DC', sel: p.sel ?? '#C4301C', shd: p.shd ?? '#8A9099',
+      seedA: p.seedA ?? 33,
+      guaranteed: [
+        { t: 'There is no function to mint more tokens. The supply is fixed at 1,000,000,000.' },
+        { t: 'No tax, no blacklist, no pause. Selling and sending are never restricted.' },
+        { t: 'All of the supply goes into the pool at launch. The creator receives no tokens.' },
+        { t: 'The pool position is locked in the factory. No function can withdraw or move it.' },
+        { t: 'Name, symbol and painting cannot be changed after launch.' }
+      ],
+      notPromised: [
+        { t: 'A price. It can fall close to zero, and the coin can end up worth nothing.' },
+        { t: 'That a locked pool means a fair or well-run coin.' },
+        { t: 'That a name is original. Anyone can launch any name, and launches are not screened.' },
+        { t: 'A steady painting. Strokes follow the market live and can come off. Only the seal is permanent.' },
+        { t: 'An audit. There is no external audit yet.' }
+      ],
+      flags: [
+        { name: 'Launched here', meaning: 'The factory has a pool recorded for this token.', value: 'true', raw: 'pool is not the zero address' },
+        { name: 'Code matches', meaning: 'The token’s code hash equals the standard token code.', value: 'true', raw: 'codehash equals the factory constant' },
+        { name: 'Supply fixed', meaning: 'Total supply equals 1,000,000,000.', value: 'true', raw: '1,000,000,000' },
+        { name: 'Position locked', meaning: 'The factory owns the pool position and it holds liquidity.', value: 'true', raw: 'owner is the factory' },
+        { name: 'Fully seeded', meaning: 'Almost all of the supply entered the pool at launch.', value: 'true', raw: 'leftover below 0.001% of supply' }
+      ],
+      contracts: [{ name: 'ZerovaFactory' }, { name: 'ZerovaEnso' }, { name: 'ZerovaRenderer' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Direction B: Lit Sheet (home, paintings, bill)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400..700&family=Source+Serif+4:opsz,wght@8..60,300..700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#E8E3D6}a:hover{color:#F2A08F}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #E8E3D6;outline-offset:3px}
+button:active{transform:scale(0.98)}
+.cta:hover{background:#F0694F !important}
+.cta:active{transform:translate(1px,1px)}
+button:hover:not(:disabled){filter:brightness(0.93)}
+button:disabled{cursor:not-allowed}
+</style>
+</helmet>
+<div style="background: #0E1116; color: #E8E3D6; font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; line-height: 1.65">
+<a href="#main" style="position: absolute; left: -9999px">Skip to main content</a>
+
+<header style="position: sticky; top: 0; z-index: 10; background: #0E1116; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 48px">
+<div style="display: flex; align-items: center; gap: 12px">
+<svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="#E8E3D6" stroke-width="2"></circle><circle cx="12" cy="12" r="2" fill="#E8E3D6"></circle></svg>
+<span style="font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; letter-spacing: 0.24em; font-size: 14px">ZEROVA</span>
+</div>
+<nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 32px; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px">
+<a href="#states" style="text-decoration: none; min-height: 44px; display: inline-flex; align-items: center">Paintings</a>
+<a href="#bill" style="text-decoration: none; min-height: 44px; display: inline-flex; align-items: center">Studio</a>
+</nav>
+</header>
+
+<main id="main">
+<section aria-labelledby="h1" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 48px 48px 128px 48px">
+<div style="border: 1px solid #2B323D">
+<dc-import name="Enso" paper="#EDE6D3" ink="#10151F" wash="#C7CBCF" seal="#D2492F" shade="#7E8794" seed="58" strokes="{{n}}" completed="{{done}}" name="Quiet Hours" symbol="QUIET" no="7" w="460" hint-size="460px,575px"></dc-import>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; align-items: center; margin-top: 24px; width: 460px; max-width: 100%">
+<div style="display: flex; align-items: center; gap: 8px" role="img" aria-label="{{dotsAlt}}">
+<sc-for list="{{dots}}" as="d" hint-placeholder-count="12">
+<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="5.5" fill="{{d.fill}}" stroke="#E8E3D6" stroke-width="1.5"></circle></svg>
+</sc-for>
+</div>
+<div style="display: flex; justify-content: space-between; width: 100%; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 13px; font-variant-numeric: tabular-nums">
+<span style="font-weight: 700; letter-spacing: 0.14em; color: #F2A08F">EXAMPLE</span>
+<span style="color: #A5ABB5">{{pctLabel}}</span>
+</div>
+<label for="slide" style="font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 13px; color: #A5ABB5">Drag to move the example from 0% to complete</label>
+<input id="slide" type="range" min="0" max="12" step="1" value="{{n}}" onInput="{{onSlide}}" style="width: 100%; accent-color: #E8E3D6; min-height: 44px">
+<div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="4">
+<button type="button" onClick="{{c.pick}}" style="min-height: 44px; padding: 0 16px; border: 1px solid #E8E3D6; border-radius: 0; background: {{c.bg}}; color: {{c.fg}}; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px; font-weight: 600; cursor: pointer">{{c.label}}</button>
+</sc-for>
+</div>
+</div>
+<h1 id="h1" style="margin: 80px 0 24px 0; max-width: 760px; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 400; font-size: 60px; line-height: 1.08; letter-spacing: -0.025em">Zero is a circle. A coin's painting closes it.</h1>
+<p style="margin: 0 0 40px 0; max-width: 540px; color: #A5ABB5">ZEROVA launches a token and an ink-circle painting together, on Robinhood Chain. The painting is drawn on-chain, one stroke at a time, as the coin's market price rises from its launch price.</p>
+<a class="cta" href="#bill" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 32px; background: #E4573D; color: #0E1116; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 16px; text-decoration: none">Open the Studio</a>
+</section>
+
+<section id="states" aria-labelledby="h2s" style="border-top: 1px solid #2B323D; padding: 96px 48px">
+<div style="max-width: 1184px; margin: 0 auto">
+<h2 id="h2s" style="margin: 0 0 8px 0; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 32px; font-weight: 500; letter-spacing: -0.01em">Four states of one painting</h2>
+<p style="margin: 0 0 48px 0; max-width: 560px; color: #A5ABB5">Strokes follow the market live and can disappear. Only the completion seal is permanent.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between">
+<figure style="margin: 0"><dc-import name="Enso" paper="#EDE6D3" ink="#10151F" wash="#C7CBCF" seal="#D2492F" shade="#7E8794" seed="58" strokes="0" completed="false" name="Quiet Hours" symbol="QUIET" no="7" w="256" hint-size="256px,320px"></dc-import><figcaption style="padding-top: 12px; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 13px; font-variant-numeric: tabular-nums"><strong style="color: #F2A08F">EXAMPLE</strong> 0%, launch price</figcaption></figure>
+<figure style="margin: 0"><dc-import name="Enso" paper="#EDE6D3" ink="#10151F" wash="#C7CBCF" seal="#D2492F" shade="#7E8794" seed="58" strokes="6" completed="false" name="Quiet Hours" symbol="QUIET" no="7" w="256" hint-size="256px,320px"></dc-import><figcaption style="padding-top: 12px; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 13px; font-variant-numeric: tabular-nums"><strong style="color: #F2A08F">EXAMPLE</strong> 50%, 6 of 12 strokes</figcaption></figure>
+<figure style="margin: 0"><dc-import name="Enso" paper="#EDE6D3" ink="#10151F" wash="#C7CBCF" seal="#D2492F" shade="#7E8794" seed="58" strokes="12" completed="false" name="Quiet Hours" symbol="QUIET" no="7" w="256" hint-size="256px,320px"></dc-import><figcaption style="padding-top: 12px; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 13px; font-variant-numeric: tabular-nums"><strong style="color: #F2A08F">EXAMPLE</strong> 100%, not yet recorded</figcaption></figure>
+<figure style="margin: 0"><dc-import name="Enso" paper="#EDE6D3" ink="#10151F" wash="#C7CBCF" seal="#D2492F" shade="#7E8794" seed="58" strokes="12" completed="true" name="Quiet Hours" symbol="QUIET" no="7" w="256" hint-size="256px,320px"></dc-import><figcaption style="padding-top: 12px; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 13px; font-variant-numeric: tabular-nums"><strong style="color: #F2A08F">EXAMPLE</strong> Complete, seal recorded</figcaption></figure>
+</div>
+</div>
+</section>
+
+<dc-import name="HomeSections" bg="#0E1116" fg="#E8E3D6" dim="#A5ABB5" line="#2B323D" strong="#3A424F" warn="#F2A08F" frame="#0E1116" fd="'Familjen Grotesk', system-ui, sans-serif" fb="'Source Serif 4', Georgia, serif" dw="500" dst="100%" bw="1" pap="#EDE6D3" ink="#10151F" wsh="#C7CBCF" sel="#D2492F" shd="#7E8794" seedA="58" hint-size="1280px,2800px"></dc-import>
+
+<section id="bill" aria-labelledby="h2b" style="border-top: 1px solid #2B323D; padding: 96px 48px">
+<div style="max-width: 1184px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 64px">
+<div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 12px">
+<div style="border: 1px solid #2B323D"><dc-import name="Enso" paper="#EDE6D3" ink="#10151F" wash="#C7CBCF" seal="#D2492F" shade="#7E8794" seed="58" strokes="0" completed="false" name="Quiet Hours" symbol="QUIET" no="—" w="256" hint-size="256px,320px"></dc-import></div>
+<p style="margin: 0; max-width: 256px; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 13px; color: #A5ABB5"><strong style="color: #F2A08F">EXAMPLE</strong> The contract draws this same painting at launch, starting at 0 strokes.</p>
+</div>
+<div style="flex: 1 1 560px; min-width: 0">
+<div style="margin: 0 0 32px 0"><dc-import name="Stepper" fg="#E8E3D6" dim="#A5ABB5" accent="#E4573D" bgc="#0E1116" fb="'Familjen Grotesk', system-ui, sans-serif" current="4" hint-size="900px,56px"></dc-import></div>
+<h2 id="h2b" style="margin: 0 0 32px 0; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 32px; font-weight: 500; letter-spacing: -0.01em">Review the bill, then sign</h2>
+<div style="background: #161B23; border: 1px solid #2B323D">
+<table style="width: 100%; border-collapse: collapse; font-size: 16px">
+<thead><tr style="text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #A5ABB5"><th scope="col" style="padding: 16px 24px; font-weight: 600">Item</th><th scope="col" style="padding: 16px 24px; font-weight: 600">What happens</th><th scope="col" style="padding: 16px 24px; font-weight: 600; text-align: right">Status</th></tr></thead>
+<tbody>
+<tr style="border-top: 1px solid #2B323D"><th scope="row" style="padding: 16px 24px; text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; vertical-align: top">Launch fee</th><td style="padding: 16px 24px; vertical-align: top">Exactly 0.0005 ETH, paid to the factory. Withdrawable only to the treasury.</td><td style="padding: 16px 24px; text-align: right; vertical-align: top; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px">Exact</td></tr>
+<tr style="border-top: 1px solid #2B323D"><th scope="row" style="padding: 16px 24px; text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; vertical-align: top">Supply</th><td style="padding: 16px 24px; vertical-align: top">1,000,000,000 tokens minted. All of them go into the pool. You receive none.</td><td style="padding: 16px 24px; text-align: right; vertical-align: top; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px">Fixed</td></tr>
+<tr style="border-top: 1px solid #2B323D"><th scope="row" style="padding: 16px 24px; text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; vertical-align: top">Pool position</th><td style="padding: 16px 24px; vertical-align: top">Locked in the factory permanently. No function can withdraw it.</td><td style="padding: 16px 24px; text-align: right; vertical-align: top; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px">Locked</td></tr>
+<tr style="border-top: 1px solid #2B323D"><th scope="row" style="padding: 16px 24px; text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; vertical-align: top">Pool fees</th><td style="padding: 16px 24px; vertical-align: top">You receive 70% of collected pool fees, in amounts no one can promise. Treasury receives 30%.</td><td style="padding: 16px 24px; text-align: right; vertical-align: top; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px">70 / 30</td></tr>
+<tr style="border-top: 1px solid #2B323D"><th scope="row" style="padding: 16px 24px; text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; vertical-align: top">Name, symbol, painting</th><td style="padding: 16px 24px; vertical-align: top">Cannot be changed after launch.</td><td style="padding: 16px 24px; text-align: right; vertical-align: top; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px">Fixed</td></tr>
+<tr style="border-top: 1px solid #2B323D"><th scope="row" style="padding: 16px 24px; text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; vertical-align: top">Wallet limit</th><td style="padding: 16px 24px; vertical-align: top">First 10 minutes: at most 2% of supply per wallet, you included. Many wallets can get around this.</td><td style="padding: 16px 24px; text-align: right; vertical-align: top; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px; font-variant-numeric: tabular-nums">2% / 10 min</td></tr>
+<tr style="border-top: 1px solid #2B323D"><th scope="row" style="padding: 16px 24px; text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; vertical-align: top">First buy</th><td style="padding: 16px 24px; vertical-align: top">None. This transaction buys no tokens for you.</td><td style="padding: 16px 24px; text-align: right; vertical-align: top; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px">None</td></tr>
+<tr style="border-top: 1px solid #2B323D"><th scope="row" style="padding: 16px 24px; text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; vertical-align: top">Names</th><td style="padding: 16px 24px; vertical-align: top">Anyone can launch any name. ZEROVA does not screen launches. A name that imitates a brand or another coin can mislead people.</td><td style="padding: 16px 24px; text-align: right; vertical-align: top; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px">Not screened</td></tr>
+<tr style="border-top: 1px solid #E8E3D6"><th scope="row" style="padding: 16px 24px; text-align: left; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 700; vertical-align: top">You pay</th><td style="padding: 16px 24px; vertical-align: top">0.0005 ETH plus gas. Gas is shown by your wallet after simulation.</td><td style="padding: 16px 24px; text-align: right; vertical-align: top; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums">0.0005 ETH</td></tr>
+</tbody>
+</table>
+</div>
+<div style="margin-top: 32px; display: flex; flex-direction: column; gap: 16px">
+<label style="display: flex; gap: 12px; align-items: flex-start; min-height: 44px; cursor: pointer; font-size: 15px; max-width: 640px"><input type="checkbox" checked="{{ack}}" onChange="{{onAck}}" style="width: 24px; height: 24px; margin: 0; accent-color: #E8E3D6; flex: 0 0 24px"><span>I have read what this transaction does and the risks above. I understand there is no external audit yet.</span></label>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center">
+<button type="button" disabled="{{signDisabled}}" onClick="{{onSign}}" style="min-width: 288px; min-height: 52px; padding: 0 32px; border: 0; background: {{signBg}}; color: {{signFg}}; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 16px; cursor: {{signCursor}}">{{signLabel}}</button>
+<button type="button" onClick="{{onReset}}" style="min-height: 52px; padding: 0 24px; border: 1px solid #E8E3D6; background: transparent; color: #E8E3D6; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-weight: 600; font-size: 16px; cursor: pointer">Back to painting</button>
+</div>
+<p role="status" aria-live="polite" style="margin: 0; min-height: 24px; font-size: 14px; color: #A5ABB5">{{simMessage}}</p>
+<p style="margin: 0; font-size: 13px; color: #A5ABB5"><strong style="letter-spacing: 0.12em">MOCK</strong> No transaction is sent from this board.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer style="border-top: 1px solid #2B323D; padding: 32px 48px 48px 48px; font-family: 'Familjen Grotesk', system-ui, sans-serif; font-size: 13px; color: #A5ABB5">
+<div style="max-width: 1184px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px">
+<span>Digital collectibles and tokens. Not financial advice. No external audit yet. Not affiliated with Robinhood Markets, Robinhood Chain, Uniswap or any marketplace.</span>
+<span>Concept board. Paintings here are illustrative drawings, not the on-chain renderer.</span>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2900}}'>
+class Component extends DCLogic {
+  billVals(bgOn, fgOn, bgOff, fgOff) {
+    const s = this.state || {};
+    const ack = s.ack === true;
+    const sim = s.sim || 0;
+    const disabled = !ack || sim !== 0;
+    return {
+      ack,
+      signDisabled: disabled,
+      signBg: disabled ? bgOff : bgOn,
+      signFg: disabled ? fgOff : fgOn,
+      signCursor: disabled ? 'not-allowed' : 'pointer',
+      signLabel: sim === 0 ? 'Sign and launch Quiet Hours' : (sim === 1 ? 'Simulating…' : 'Confirm in your wallet'),
+      simMessage: sim === 0 ? (ack ? 'Ready. The transaction is simulated before your wallet is asked to sign.' : 'Tick the box above to continue.') : (sim === 1 ? 'Simulating the transaction against the chain…' : 'Simulation passed. Your wallet will ask you to sign. Nothing has been sent.'),
+      onAck: (e) => this.setState({ ack: e.target.checked, sim: 0 }),
+      onSign: () => { this.setState({ sim: 1 }); setTimeout(() => this.setState({ sim: 2 }), 900); },
+      onReset: () => this.setState({ sim: 0 })
+    };
+  }
+  renderVals() {
+    const s = this.state || {};
+    const n = s.n === undefined ? 6 : s.n;
+    const done = s.done === true;
+    const mk = (label, nn, dd) => {
+      const on = (n === nn && done === dd);
+      return { label, pick: () => this.setState({ n: nn, done: dd }), bg: on ? '#E8E3D6' : 'transparent', fg: on ? '#0E1116' : '#E8E3D6' };
+    };
+    const pct = Math.round(n * 100 / 12);
+    const dots = [];
+    for (let i = 0; i < 12; i++) dots.push({ fill: i < n ? '#E8E3D6' : 'none' });
+    return {
+      ...this.billVals("#E4573D", "#0E1116", "#2B323D", "#A5ABB5"),
+      n, done, dots,
+      dotsAlt: n + ' of 12 strokes drawn',
+      pctLabel: done ? 'Complete, seal recorded' : (pct + '%, ' + n + ' of 12 strokes'),
+      onSlide: (e) => this.setState({ n: Number(e.target.value), done: false }),
+      chips: [mk('0%', 0, false), mk('50%', 6, false), mk('100%', 12, false), mk('Complete', 12, true)]
+    };
+  }
+}
+</script>
+</body>
+</html>
