@@ -105,10 +105,7 @@ html[data-theme="c"] h1 .l2{font-weight:300;font-stretch:100%}
 @keyframes rise{to{transform:none}}
 .lead{max-width:520px;color:var(--dim);margin:0 0 var(--s6)}
 html[data-theme="b"] .hero .wrap{flex-direction:column;align-items:center;text-align:center;gap:var(--s6)}
-html[data-theme="b"] .hero-art{order:-1;width:min(460px,100%)}
-html[data-theme="b"] .hero-text{padding-top:0;display:flex;flex-direction:column;align-items:center}
-html[data-theme="b"] .lead{margin-inline:auto}
-html[data-theme="b"] h1{font-size:clamp(38px,5.4vw,60px);max-width:760px;margin-top:var(--s3)}
+html[data-theme="b"] h1{font-size:clamp(40px,5.6vw,72px)}
 
 .cta{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:var(--s3);min-height:56px;padding:0 var(--s6);background:var(--accent);color:var(--accentfg);font-family:var(--fl);font-weight:700;font-size:16px;text-decoration:none;border:0;cursor:pointer;isolation:isolate;transition:transform .1s}
 .cta::before{content:"";position:absolute;inset:0;background:var(--accent-d);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease-out);z-index:-1}
@@ -239,6 +236,37 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
   .row4 figure:nth-child(even){margin-top:0}
   .signrow .cta{min-width:0;width:100%}
 }
+
+/* ---- clean pass: lighter chrome, product in hero, calmer center ---- */
+.hdr{border-bottom:1px solid color-mix(in srgb,var(--fg) 14%,transparent);padding:var(--s3) var(--s7)}
+.nav{display:flex;gap:var(--s6);margin-left:auto;margin-right:var(--s6)}
+.nav a{font-family:var(--fl);font-size:14px;font-weight:600;text-decoration:none;color:var(--dim);padding:var(--s3) 0;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.nav a:hover{color:var(--fg);border-bottom-color:var(--fg)}
+.cta-s{min-height:44px;padding:0 var(--s5);font-size:14px}
+section{border-top:1px solid color-mix(in srgb,var(--fg) 12%,transparent);padding:calc(var(--s9)*1.15) 0}
+.hero{padding:var(--s8) 0 calc(var(--s9)*1.2)}
+.ticket{margin-top:var(--s5);border:1px solid color-mix(in srgb,var(--fg) 22%,transparent);background:color-mix(in srgb,var(--bg) 82%,transparent);padding:var(--s4) var(--s5);backdrop-filter:blur(6px)}
+.tk-h{display:flex;justify-content:space-between;align-items:center;padding-bottom:var(--s3);margin-bottom:var(--s3);border-bottom:1px solid color-mix(in srgb,var(--fg) 14%,transparent);font-family:var(--fl);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.tk-r,.ticket .readout{display:flex;justify-content:space-between;gap:var(--s4);font-family:var(--fl);font-size:14px;padding:var(--s2) 0}
+.tk-r span:first-child,.ticket .readout span:first-child{color:var(--dim)}
+.ticket .readout .ex{display:none}
+.ticket .big{display:none}
+#bgcv{-webkit-mask-image:linear-gradient(90deg,#000 0,rgba(0,0,0,.3) 20%,rgba(0,0,0,.3) 80%,#000 100%);mask-image:linear-gradient(90deg,#000 0,rgba(0,0,0,.3) 20%,rgba(0,0,0,.3) 80%,#000 100%)}
+.dock{position:fixed;left:var(--s4);bottom:var(--s4);z-index:30;display:flex;align-items:center;gap:var(--s3);padding:var(--s2) var(--s3);background:color-mix(in srgb,var(--bg) 92%,transparent);border:1px solid color-mix(in srgb,var(--fg) 22%,transparent);backdrop-filter:blur(8px)}
+.dock-l{font-family:var(--fl);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:0 var(--s2)}
+.dock .seg{border:0}
+.dock .seg button{min-height:36px;font-size:12px}
+.dock .mo{min-height:36px;padding:0 var(--s3);font-size:12px}
+footer{padding-bottom:calc(var(--s9)*1.1)}
+@media (max-width:720px){
+  .nav{display:none}
+  .hdr{justify-content:space-between}
+  body{padding-bottom:72px}
+  .dock{left:var(--s2);width:calc(100% - var(--s2)*2);justify-content:space-between;gap:var(--s2);padding:var(--s2)}
+  .dock-l{display:none}
+  .dock .seg button{padding:0 var(--s2);font-size:11px}
+  .ticket{margin-top:var(--s4)}
+}
 @media (prefers-reduced-motion:reduce){
   .ln>span{transform:none}
 }
@@ -259,14 +287,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
     <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="10" fill="none" stroke="currentColor" stroke-width="3.2" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset=".12" transform="rotate(-60 14 14)"/></svg>
     ZEROVA
   </a>
-  <div class="hdr-r">
-    <div class="seg" role="radiogroup" aria-label="Visual direction (concept board)">
-      <button type="button" role="radio" aria-checked="false" data-t="a">A Washi</button>
-      <button type="button" role="radio" aria-checked="false" data-t="b">B Lit Sheet</button>
-      <button type="button" role="radio" aria-checked="true" data-t="c">C Zero Ledger</button>
-    </div>
-    <button type="button" class="mo" id="mo" aria-pressed="false">Pause motion</button>
-  </div>
+  <nav class="nav" aria-label="Primary">
+    <a href="#bill">Studio</a><a href="#states">Gallery</a><a href="#how">How it works</a><a href="#zs">Zero Standard</a>
+  </nav>
+  <a class="cta cta-s" href="#bill">Open Studio</a>
 </header>
 
 <main id="main">
@@ -283,8 +307,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
     </div>
     <div class="hero-art">
       <div class="frame" id="heroFrame"><div class="paint" id="heroPaint" role="img" aria-label="Illustrative ink circle painting"></div></div>
-      <div class="ctl">
-        <div class="readout"><span class="ex">EXAMPLE</span><span id="pct">0%, 0 of 12 strokes</span></div>
+      <div class="ctl ticket">
+        <div class="tk-h"><span>Studio ticket</span><span class="ex">EXAMPLE</span></div>
+        <div class="tk-r"><span>Name</span><span>Quiet Hours (QUIET)</span></div>
+        <div class="readout"><span>Progress</span><span id="pct">0%, 0 of 12 strokes</span></div>
         <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:var(--s2) var(--s4)"><span class="big" aria-hidden="true"><span id="bigN">0</span> / 12</span><span class="note" id="auto" style="flex:1 1 200px;text-align:right">Example loop. Drag the painting, or use the controls.</span></div>
         <label for="slide" class="note">Move the example from 0% to complete</label>
         <input id="slide" type="range" min="0" max="12" step="1" value="0">
@@ -397,6 +423,15 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(-
     <span>Concept prototype. Paintings are illustrative drawings, not the on-chain renderer.</span>
   </div>
 </footer>
+<div class="dock" role="group" aria-label="Concept board controls (not part of the product)">
+  <span class="dock-l">Concept</span>
+  <div class="seg" role="radiogroup" aria-label="Visual direction (concept board)">
+    <button type="button" role="radio" aria-checked="false" data-t="a">A Washi</button>
+    <button type="button" role="radio" aria-checked="false" data-t="b">B Lit Sheet</button>
+    <button type="button" role="radio" aria-checked="true" data-t="c">C Zero Ledger</button>
+  </div>
+  <button type="button" class="mo" id="mo" aria-pressed="false">Pause motion</button>
+</div>
 
 <script>
 (function(){
