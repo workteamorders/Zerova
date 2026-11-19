@@ -64,3 +64,15 @@ Sesi ini tidak memegang kunci dan tidak menyiarkan transaksi. Tidak ada transaks
 
 ## 6. Sumber yang dibaca
 - docs.ponsfamily.com; developers.uniswap.org (V3 Robinhood Chain deployments); docs.robinhood.com/chain (index, contracts, protocol-contracts, differences-from-ethereum, deploy-smart-contracts); docs.bitquery.io (chain ID); github.com/Uniswap/v3-core LICENSE; developers.cloudflare.com/pages/platform/limits.
+
+## Owner override of visual rules (2026-11-20)
+
+The owner chose the "Sumi" home page from a reference image and asked for it to match exactly, including elements the original spec forbids:
+
+- red sun discs and misty mountains (spec: no kitsch "zen" such as mountains or sun),
+- a kanji seal 円 (spec: no pseudo-kanji or fake calligraphy; 円 is a real character, used as decoration),
+- numbered sections "01 / 02 / 03" (spec: do not copy the Quanta Pools look, including numbered sections).
+
+The owner was told these conflict with the spec and chose to use them anyway. These three rules no longer apply to the home page. All other spec rules stand, including the banned-copy list and the footer disclaimers.
+
+Also decided: the hero shows a brand ink circle (black and red); each coin's own painting is its symbol written in 12 strokes (option B).
