@@ -161,6 +161,43 @@ html[data-c="f"] #bgcv{-webkit-mask-image:linear-gradient(90deg,#000 0,rgba(0,0,
 .symin{min-height:88px!important;font-family:var(--fd)!important;font-size:52px!important;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:0 var(--s5)!important}
 .symf{margin-bottom:var(--s6)}
 .zdot{display:none}
+.exn{font-size:13px;font-weight:600;color:var(--fg);margin-left:6px}
+#wallet .spin{display:none}#wallet.busy .spin{display:block}#wallet.busy .dot{display:none}
+body.lock{overflow:hidden}
+#flow{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;background:var(--bg);opacity:0;transform:scale(.985);transition:opacity .26s var(--ease-out),transform .26s var(--ease-out);overflow-y:auto}
+#flow.open{opacity:1;transform:none}
+[hidden]{display:none!important}
+.fl-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:var(--s4);padding:var(--s3) var(--s7);border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 90%,transparent)}
+.fl-ic{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;border:1px solid color-mix(in srgb,var(--fg) 25%,transparent);background:var(--bg2);cursor:pointer}
+.fl-ic:hover{border-color:var(--fg)}
+.fl-prog{flex:1;display:flex;flex-direction:column;gap:6px;max-width:420px;margin:0 auto}
+.fl-bar{height:4px;border-radius:4px;background:var(--line);overflow:hidden}.fl-bar i{display:block;height:100%;background:var(--accent);transform-origin:left;transition:transform .5s var(--ease-out)}
+.fl-wal{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:8px 14px;border:1px solid var(--accent);border-radius:999px}.fl-wal .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.fl-body{flex:1;width:100%;max-width:1180px;margin:0 auto;padding:var(--s7);display:grid;gap:var(--s8);align-items:center;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+.fl-art{width:min(420px,100%);justify-self:center;transition:width .45s var(--ease-out)}
+.fl-cap{margin-top:var(--s3);min-height:20px}
+#flPaint svg{transition:none}
+.fl-q{transition:opacity .22s var(--ease-out),transform .22s var(--ease-out)}
+.fl-q.out{opacity:0;transform:translateX(-24px)}.fl-q.in{opacity:0;transform:translateX(24px);transition:none}
+.fl-q h2{font-size:clamp(32px,4vw,52px);line-height:1.05;margin:var(--s3) 0 var(--s4);outline:none}
+.fl-sub{color:var(--dim);max-width:560px;margin-bottom:var(--s6)}
+.fl-k{color:var(--accent)}
+.fl-more{display:inline-block;margin:var(--s2) 0 var(--s4)}
+#flow[data-view="solo"] .fl-body{grid-template-columns:1fr;max-width:760px}
+#flow[data-view="solo"] .fl-art{display:none}
+#flow[data-view="solo"] .fl-q{text-align:left}
+#flow[data-view="done"] .fl-body{grid-template-columns:1fr;justify-items:center;text-align:center;gap:var(--s4)}
+#flow[data-view="done"] .fl-art{width:min(300px,70vw,32vh)}
+#flow[data-view="done"] .fl-q{display:flex;flex-direction:column;align-items:center}
+#flow[data-view="done"] .fl-sub{margin-left:auto;margin-right:auto}
+#flow[data-view="center"] .fl-body{grid-template-columns:1fr;justify-items:center;text-align:center;gap:var(--s5)}
+#flow[data-view="center"] .fl-art{width:min(460px,86vw,52vh)}
+#flow[data-view="center"] .fl-q{display:flex;flex-direction:column;align-items:center}
+#flow[data-view="center"] .fl-sub{margin-left:auto;margin-right:auto}
+#flow .symin{text-align:left}
+.symin::placeholder{color:color-mix(in srgb,var(--fg) 28%,transparent)}
+.tip{pointer-events:none}.fxc{transform-box:fill-box;transform-origin:center}
+@media (max-width:900px){.fl-body{grid-template-columns:1fr;gap:var(--s5);padding:var(--s5) var(--s4)}.fl-art{width:min(220px,56vw)}.fl-top{padding:var(--s3) var(--s4)}.fl-wal{display:none}#flow[data-view="center"] .fl-art{width:min(340px,80vw,46vh)}}
 @media (max-width:900px){.nav{display:none}.acts{margin-left:auto}}
 @media (max-width:720px){
   .wrap,.hdr{padding-left:var(--s4);padding-right:var(--s4)}
@@ -184,10 +221,10 @@ html[data-c="f"] #bgcv{-webkit-mask-image:linear-gradient(90deg,#000 0,rgba(0,0,
     <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="10" fill="none" stroke="currentColor" stroke-width="3.2" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset=".12" transform="rotate(-60 14 14)"/></svg>
     ZEROVA
   </a>
-  <nav class="nav" aria-label="Primary"><a href="#studio">Studio</a><a href="#gallery">Gallery</a><a href="#how">How it works</a><a href="#zs">Zero Standard</a></nav>
+  <nav class="nav" aria-label="Primary"><a href="#gallery">Gallery</a><a href="#how">How it works</a><a href="#zs">Zero Standard</a></nav>
   <div class="acts">
-    <button type="button" class="btn ghost" id="wallet" aria-pressed="false"><span class="dot" aria-hidden="true"></span><span class="full" id="walletL">Connect wallet</span><span class="short" id="walletS">Connect</span></button>
-    <a class="btn primary" href="#studio"><span class="full">Launch a coin</span><span class="short">Launch</span></a>
+    <button type="button" class="btn primary" id="wallet" aria-pressed="false"><svg class="spin" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg><span class="dot" aria-hidden="true"></span><span class="full" id="walletL">Connect wallet</span><span class="short" id="walletS">Connect</span></button>
+    <button type="button" class="btn primary" id="launchTop" hidden><span class="full">Launch a coin</span><span class="short">Launch</span></button>
   </div>
 </header>
 
@@ -199,15 +236,15 @@ html[data-c="f"] #bgcv{-webkit-mask-image:linear-gradient(90deg,#000 0,rgba(0,0,
       <h1><span class="ln"><span class="l1" id="h1a">Start at 0.</span></span><span class="ln"><span class="l2" id="h1b">Write it in ink.</span></span></h1>
       <p class="lead">Every launch mints one token and one Enso: the coin's symbol, brushed on-chain in 12 strokes. The strokes follow the coin's market price upward from its launch price, and come off again if it falls.</p>
       <div class="cta-row">
-        <a class="btn primary lg" href="#studio">Launch a coin</a>
+        <button type="button" class="btn primary lg" id="heroCta">Connect wallet</button>
         <a class="btn ghost lg" href="#how">How it works</a>
       </div>
-      <p class="note" style="margin-top:var(--s4)">No account. Your wallet signs.</p>
+      <p class="note" style="margin-top:var(--s4)" id="heroNote">Connect a wallet first. Then launch in six short steps.</p>
     </div>
     <div class="hero-art">
       <div class="frame" id="heroFrame"><div class="paint" id="heroPaint"></div></div>
       <div class="ctl">
-        <div class="readout"><span class="ex">EXAMPLE</span><span id="pct">0%, 0 of 12 strokes</span></div>
+        <div class="readout"><span><span class="ex">EXAMPLE</span> <span id="exName" class="exn"></span></span><span id="pct">0%, 0 of 12 strokes</span></div>
         <label for="slide" class="sr">Move the example from 0% to complete</label>
         <input id="slide" type="range" min="0" max="12" step="1" value="0">
         <div class="chips" role="group" aria-label="Jump to a state">
@@ -216,7 +253,7 @@ html[data-c="f"] #bgcv{-webkit-mask-image:linear-gradient(90deg,#000 0,rgba(0,0,
           <button type="button" class="chip" data-n="12">100%</button>
           <button type="button" class="chip" data-n="12" data-done="1">Complete</button>
         </div>
-        <p class="note" id="auto">Example loop. Drag across the painting, or use the controls.</p>
+        <p class="note" id="auto">Example symbols, written one after another. Drag across the painting, or use the controls.</p>
       </div>
     </div>
   </div>
@@ -267,80 +304,13 @@ html[data-c="f"] #bgcv{-webkit-mask-image:linear-gradient(90deg,#000 0,rgba(0,0,
       <p class="note" style="font-size:15px">They describe how a coin is built. They do not rate its value or its security.</p>
     </div>
     <div>
-      <div class="zhead rv"><span class="lbl" style="color:var(--fg)">XPRT</span><span class="ex">EXAMPLE</span></div>
+      <div class="zhead rv"><span class="lbl" style="color:var(--fg)">TIDE</span><span class="ex">EXAMPLE</span></div>
       <div id="flags"></div>
       <div class="nc rv"><span class="lbl">Not covered</span>The price and the pool's liquidity can fall. A coin can imitate another name. These checks do not show who holds the token, nor the risk in the Uniswap V3 pool or in the chain itself.</div>
     </div>
   </div>
 </section>
 
-<section id="studio">
-  <div class="wrap">
-    <h2 class="rv">Studio</h2>
-    <p class="sub rv">Make your coin and its Enso. Four steps, then one transaction.</p>
-    <div class="studio">
-      <aside class="rv">
-        <div class="frame"><div class="paint" id="studioPaint"></div></div>
-        <p class="note" id="paintNote"><span class="ex">EXAMPLE</span> Preview only. The contract draws the final painting.</p>
-      </aside>
-      <div class="main">
-        <div class="walletbar rv"><span id="wbTxt">Wallet not connected.</span><button type="button" class="btn ghost" id="wbBtn">Connect wallet</button></div>
-        <ol class="steps" id="steps" aria-label="Studio progress"></ol>
-
-        <div class="panel on" data-step="0">
-          <div class="field symf"><label for="sy">Symbol</label><input id="sy" class="symin" type="text" maxlength="8" value="XPRT" autocomplete="off" spellcheck="false" autocapitalize="characters" aria-describedby="syh"><span class="hint" id="syh">2 to 8 letters A to Z or digits 0 to 9. It becomes the painting. Cannot be changed after launch.</span></div>
-          <div class="field"><label for="nm">Name <span class="hint">optional</span></label><input id="nm" type="text" maxlength="32" value="" placeholder="Same as the symbol" autocomplete="off" spellcheck="false"><span class="hint">Up to 32 characters, shown under the painting. Leave empty to use the symbol.</span></div>
-          <p class="err" id="err1" role="alert"></p>
-          <div class="nav2"><button type="button" class="btn primary" data-go="1">Next: gesture and pigment</button></div>
-        </div>
-
-        <div class="panel" data-step="1">
-          <div class="field"><span class="lb" id="gl">Gesture</span><div class="opts" role="radiogroup" aria-labelledby="gl" id="gests"></div></div>
-          <div class="field"><span class="lb" id="pl">Pigment</span><div class="sw" role="radiogroup" aria-labelledby="pl" id="pigs"></div></div>
-          <div class="nav2"><button type="button" class="btn ghost" data-go="0">Back</button><button type="button" class="btn primary" data-go="2">Next: preview</button></div>
-        </div>
-
-        <div class="panel" data-step="2">
-          <p class="sub" style="margin-bottom:var(--s5)">Scrub the painting through its states. The contract draws the same strokes from the market price.</p>
-          <div class="chips" role="group" aria-label="Preview state" id="pvChips">
-            <button type="button" class="chip" data-n="0">0%</button><button type="button" class="chip" data-n="6">50%</button><button type="button" class="chip" data-n="12">100%</button><button type="button" class="chip" data-n="12" data-done="1">Complete</button>
-          </div>
-          <div class="nav2"><button type="button" class="btn ghost" data-go="1">Back</button><button type="button" class="btn primary" data-go="3">Next: review and sign</button></div>
-        </div>
-
-        <div class="panel" data-step="3">
-          <h3 style="margin-bottom:var(--s3)">What this transaction does</h3>
-          <p class="sub" style="margin-bottom:var(--s5)">Read the bill, then sign. Some lines are zeros on purpose.</p>
-          <dl class="bill">
-            <div><dt>Launch fee</dt><dd>Exactly 0.0005 ETH, paid to the factory and withdrawable only to the treasury address.</dd></div>
-            <div><dt>Supply</dt><dd>1,000,000,000 tokens are minted and all of them go into the pool.</dd><dd class="z">0 to you</dd></div>
-            <div><dt>Pool position</dt><dd>Locked in the factory permanently.</dd><dd class="z">0 ways out</dd></div>
-            <div><dt>First buy</dt><dd>This transaction buys no tokens for you.</dd><dd class="z">0</dd></div>
-            <div><dt>Changes later</dt><dd>Name, symbol and painting cannot be changed after launch.</dd><dd class="z">0</dd></div>
-            <div><dt>Pool fees</dt><dd>You receive 70% of collected pool fees, in amounts nobody can promise. The treasury receives 30%.</dd></div>
-            <div><dt>Wallet limit</dt><dd>First 10 minutes: at most 2% of supply per wallet, you included. Many wallets can get around it.</dd></div>
-            <div><dt>Names</dt><dd>Anyone can launch any name. ZEROVA does not screen launches. A name that imitates a brand or another coin can mislead people.</dd></div>
-            <div><dt>You pay</dt><dd>0.0005 ETH plus gas. Your wallet shows gas after the transaction is simulated.</dd></div>
-          </dl>
-          <label class="ack"><input type="checkbox" id="ack"><span>I have read what this transaction does and the risks above. I understand there is no external audit yet.</span></label>
-          <div class="nav2" id="signrow"><button type="button" class="btn ghost" data-go="2">Back</button><button type="button" class="btn primary lg" id="sign"><svg class="spin" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg><span id="signL">Connect wallet to launch</span></button></div>
-          <p class="status" role="status" aria-live="polite" id="stat"></p>
-          <p class="note"><span class="mock">MOCK</span> Prototype. No wallet is contacted and no transaction is sent from this page.</p>
-        </div>
-
-        <div class="panel" data-step="4">
-          <div class="result">
-            <span class="mock">MOCK RESULT</span>
-            <h3 id="resT">XPRT would be launched</h3>
-            <p>In the real product this step shows the transaction, the token address and a link to the coin's page. Here, nothing was sent and no coin exists.</p>
-            <p>The Enso starts at 0 strokes and follows the market from the first trade.</p>
-            <div class="nav2"><button type="button" class="btn primary" id="again">Make another</button></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 </main>
 
 <footer>
@@ -350,6 +320,19 @@ html[data-c="f"] #bgcv{-webkit-mask-image:linear-gradient(90deg,#000 0,rgba(0,0,
   </div>
 </footer>
 <div id="toast" role="status" aria-live="polite"></div>
+
+<div id="flow" role="dialog" aria-modal="true" aria-labelledby="fq" hidden data-view="solo">
+  <div class="fl-top">
+    <button type="button" class="fl-ic" id="flBack" aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <div class="fl-prog"><span id="flStep" class="lbl">Step 1 of 6</span><div class="fl-bar"><i id="flBar"></i></div></div>
+    <span class="fl-wal" id="flWal"><span class="dot"></span>0x7a3F…9c21</span>
+    <button type="button" class="fl-ic" id="flClose" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+  <div class="fl-body">
+    <div class="fl-art"><div class="frame" id="flFrame"><div class="paint" id="flPaint"></div></div><p class="note fl-cap" id="flCap"></p></div>
+    <div class="fl-q" id="flQ"></div>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -450,10 +433,10 @@ function buildSym(sym,seed,gi){
   function line(pen,i0,i1,f,ex){var o=[],i;for(i=i0;i<=i1;i++){var k=f*pen.w[i]+ex;o.push([pen.p[i][0]+pen.nx[i]*k,pen.p[i][1]+pen.ny[i]*k])}return'M'+o.map(function(q){return f1(q[0])+','+f1(q[1])}).join(' L')}
   var strokes=[];
   for(var k=0;k<12;k++){
-    var A=total*k/12,B=total*(k+1)/12,s={i:k,body:'',halo:'',head:'',op:k%2===0?.94:.9,center:'',br:[],hr:[],dots:[]};
+    var A=total*k/12,B=total*(k+1)/12,s={i:k,body:'',halo:'',head:'',op:k%2===0?.94:.9,center:'',br:[],hr:[],dots:[],segs:[]};
     cuts.forEach(function(c){var lo=Math.max(A,c.a),hi=Math.min(B,c.b);if(hi-lo<.5)return;var pen=pens[c.pi],s0=lo-c.a,s1=hi-c.a;
       var ix=sub(pen,Math.max(0,s0-3),s1+3),i0=ix[0],i1=ix[1];if(i1-i0<1)return;
-      s.body+=poly(pen,i0,i1,0,1);s.halo+=poly(pen,i0,i1,H*.012,1.7);s.center+=line(pen,i0,i1,0,0);
+      s.segs.push({p:pen.p.slice(i0,i1+1),st:s0<1});s.body+=poly(pen,i0,i1,0,1);s.halo+=poly(pen,i0,i1,H*.012,1.7);s.center+=line(pen,i0,i1,0,0);
       if(s0<1){var hi2=Math.min(i1,i0+6);s.head+=poly(pen,i0,hi2,0,1)}
       var nb=Math.max(3,5+Math.round(g.dry*4));
       for(var b=0;b<nb;b++){var f=-.4+(.8*b)/(nb-1)+(r()-.5)*.06;if(r()<.35+.65*g.dry)s.br.push({d:line(pen,i0,i1,f,0),sw:f1((1+r()*2.8*(.5+g.dry))*H/300),op:f1(.3+.55*g.dry*r()+.2*r()),dash:Math.round(14+r()*60)+' '+Math.round(4+r()*20*(.4+g.dry))+' '+Math.round(16+r()*60)+' '+Math.round(4+r()*16)})}
@@ -504,7 +487,7 @@ var PIGS=[{n:'Sumi',ink:'#151821',wash:'#C5C9D0',seal:'#B8321E'},{n:'Indigo',ink
 function cv(n){return getComputedStyle(doc).getPropertyValue(n).trim()}
 function Painting(el,spec,opts){this.el=el;this.spec=spec;this.n=0;this.done=false;this.small=!!opts.small;this.timers=[];this.no=opts.no||'7';this.render()}
 Painting.prototype.render=function(){
-  var s=this.spec,p=PIGS[s.pig],data=buildSym(s.sym,s.seed,s.g);this.bx=data.bounds;
+  if(this.wr)this.stopWrite();this.fx=null;var s=this.spec,p=PIGS[s.pig],data=buildSym(s.sym,s.seed,s.g);this.bx=data.bounds;this.data=data;this.ink=p.ink;
   this.el.innerHTML=svgSym(data,{paper:cv('--p-paper'),shade:cv('--p-shade'),ink:p.ink,wash:p.wash,seal:p.seal},s.name,s.sym,this.no);
   this.svg=this.el.firstChild;this.masks=[].slice.call(this.svg.querySelectorAll('.mp'));this.cnt=this.svg.querySelector('.cnt');
   this.apply(this.n,this.done,false);
@@ -528,14 +511,64 @@ Painting.prototype.apply=function(n,done,animate){
   this.el.setAttribute('role','img');this.el.setAttribute('aria-label','Illustrative ink painting of the symbol '+this.spec.sym+', '+n+' of 12 strokes drawn'+(done?', completion seal stamped':'')+', example only');
 };
 Painting.prototype.setDone=function(d){this.done=d;this.svg.classList.toggle('done',d)};
+/* writing animation: a brush tip travels each stroke in order; every touch on the paper zooms in and leaves a ripple */
+var SVGNS='http://www.w3.org/2000/svg';
+function sv(tag,at){var e=document.createElementNS(SVGNS,tag);for(var k in at)e.setAttribute(k,at[k]);return e}
+Painting.prototype.stopWrite=function(){if(this.wr){cancelAnimationFrame(this.wr.raf);this.wr=null}if(this.fx)this.fx.innerHTML=''};
+Painting.prototype.write=function(o){
+  o=o||{};var self=this,d=this.data,svg=this.svg;this.stopWrite();this.timers.forEach(clearTimeout);this.timers=[];
+  if(motionOff){this.apply(12,false,false);if(o.done)o.done();return}
+  var P=[],total=0;
+  d.strokes.forEach(function(s,k){var acc=0;s.segs.forEach(function(sg){var L=[0];for(var i=1;i<sg.p.length;i++)L.push(L[i-1]+Math.hypot(sg.p[i][0]-sg.p[i-1][0],sg.p[i][1]-sg.p[i-1][1]));sg.L=L;sg.len=L[L.length-1];sg.a=acc;acc+=sg.len;P.push({k:k,sg:sg})});s.len=acc||1;total+=acc});
+  var dur=Math.max(o.fast?1000:2600,Math.min(o.fast?2000:5400,total/(o.fast?3.4:1.3))),v=total/dur;
+  this.masks.forEach(function(m){m.style.transition='none';m.style.transitionDelay='0s';m.style.strokeDashoffset='1'});
+  this.setDone(false);this.n=0;if(this.cnt)this.cnt.textContent='0 of 12 strokes';
+  if(!this.fx){this.fx=sv('g',{'class':'fx'});svg.appendChild(this.fx)}this.fx.innerHTML='';
+  var tw=d.maskW*.2,tip=sv('g',{'class':'tip',opacity:'0'}),tb=sv('g',{});
+  tb.appendChild(sv('ellipse',{cx:tw*.5,cy:tw*.35,rx:tw*1.3,ry:tw*.66,fill:'#10222A','fill-opacity':'.14'}));tb.appendChild(sv('ellipse',{cx:0,cy:0,rx:tw*1.25,ry:tw*.62,fill:this.ink,stroke:'#FAFBF8','stroke-width':'2.5','stroke-opacity':'.85'}));
+  tb.appendChild(sv('ellipse',{cx:-tw*.55,cy:-tw*.12,rx:tw*.55,ry:tw*.18,fill:'#fff','fill-opacity':'.28'}));
+  tip.appendChild(tb);this.fx.appendChild(tip);
+  var idx=0,dist=0,pause=0,pending=true,last=0,kDone=-1;
+  function at(sg,s){var i=1;while(i<sg.L.length-1&&sg.L[i]<s)i++;var a=sg.p[i-1],b=sg.p[i],f=(s-sg.L[i-1])/Math.max(1e-6,sg.L[i]-sg.L[i-1]);f=Math.max(0,Math.min(1,f));return{x:a[0]+(b[0]-a[0])*f,y:a[1]+(b[1]-a[1])*f,ang:Math.atan2(b[1]-a[1],b[0]-a[0])*57.2958}}
+  function touch(x,y){
+    var H=d.H,ink=self.ink;
+    var rip=sv('circle',{cx:x,cy:y,r:H*.24,fill:'none',stroke:ink,'stroke-width':2,'stroke-opacity':'.6','class':'fxc'});self.fx.insertBefore(rip,tip);
+    rip.animate([{transform:'scale(.12)',opacity:.55},{transform:'scale(1)',opacity:0}],{duration:780,easing:'cubic-bezier(.2,.7,.2,1)'}).onfinish=function(){rip.remove()};
+    var blot=sv('circle',{cx:x,cy:y,r:H*.08,fill:ink,'class':'fxc'});self.fx.insertBefore(blot,tip);
+    blot.animate([{transform:'scale(.3)',opacity:.35},{transform:'scale(1.5)',opacity:0}],{duration:520,easing:'ease-out'}).onfinish=function(){blot.remove()};
+    for(var q=0;q<4;q++){(function(){var a=Math.random()*6.28,r=2+Math.random()*4,dd=H*(.06+Math.random()*.1),dot=sv('circle',{cx:x,cy:y,r:r,fill:ink,'class':'fxc'});self.fx.insertBefore(dot,tip);
+      dot.animate([{transform:'translate(0,0) scale(.4)',opacity:.9},{transform:'translate('+(Math.cos(a)*dd)+'px,'+(Math.sin(a)*dd)+'px) scale(1)',opacity:0}],{duration:640,easing:'cubic-bezier(.1,.8,.3,1)'}).onfinish=function(){dot.remove()}})()}
+    tb.animate([{transform:'scale(1.5)'},{transform:'scale(1)'}],{duration:300,easing:'ease-out'});
+    svg.style.transformOrigin=(x/10)+'% '+(y/12.5)+'%';
+    svg.animate([{transform:'scale(1)'},{transform:'scale('+(o.zoom||1.07)+')',offset:.3},{transform:'scale(1)'}],{duration:640,easing:'cubic-bezier(.2,.8,.2,1)'});
+    if(o.onTouch)o.onTouch();
+  }
+  function setMasks(k,f){for(var j=0;j<12;j++){var off=j<k?0:j>k?1:1-f;self.masks[j].style.strokeDashoffset=String(off)}
+    if(k!==kDone){kDone=k;if(self.cnt)self.cnt.textContent=k+' of 12 strokes';self.n=k;if(o.onStep)o.onStep(k)}}
+  function step(t){
+    var w=self.wr;if(!w)return;var dt=last?Math.min(48,t-last):16;last=t;
+    if(pause>0){pause-=dt;w.raf=requestAnimationFrame(step);return}
+    var cur=P[idx];
+    if(pending){var p0=at(cur.sg,0);tip.setAttribute('opacity','1');tip.setAttribute('transform','translate('+p0.x+','+p0.y+') rotate('+p0.ang+')');touch(p0.x,p0.y);pending=false}
+    dist+=v*dt;
+    while(dist>=cur.sg.len){dist-=cur.sg.len;idx++;
+      if(idx>=P.length){setMasks(12,0);tip.animate([{opacity:1,transform:tip.getAttribute('transform')},{opacity:0,transform:tip.getAttribute('transform')+' translate(-14,-22)'}],{duration:260,fill:'forwards'});
+        self.wr=null;self.n=12;if(self.cnt)self.cnt.textContent='12 of 12 strokes';self.timers.push(setTimeout(function(){if(o.done)o.done()},300));return}
+      cur=P[idx];if(cur.sg.st){dist=0;pause=o.fast?70:170;pending=true;tip.setAttribute('opacity','0');setMasks(cur.k,0);w.raf=requestAnimationFrame(step);return}}
+    var p=at(cur.sg,dist);setMasks(cur.k,(cur.sg.a+dist)/self.data.strokes[cur.k].len);
+    tip.setAttribute('transform','translate('+p.x.toFixed(1)+','+p.y.toFixed(1)+') rotate('+p.ang.toFixed(1)+')');
+    w.raf=requestAnimationFrame(step);
+  }
+  this.wr={raf:requestAnimationFrame(step)};
+};
 
-var NAME0='XPRT',SYM0='XPRT';
+var NAME0='TIDE',SYM0='TIDE';
 var items=[];
 [].slice.call(document.querySelectorAll('.paint')).forEach(function(el,idx){
-  if(el.id==='heroPaint'||el.id==='studioPaint')return;
-  items.push({p:new Painting(el,{seed:HERO.seed,g:HERO.g,pig:PIG0,name:NAME0,sym:SYM0},{small:true,no:String(idx+1)}),tn:+el.dataset.n||0,td:el.dataset.done==='1',drawn:false});
+  if(el.id==='heroPaint'||el.id==='flPaint')return;
+  items.push({p:new Painting(el,{seed:97,g:0,pig:1,name:NAME0,sym:SYM0},{small:true,no:String(idx+1)}),tn:+el.dataset.n||0,td:el.dataset.done==='1',drawn:false});
 });
-var hero=new Painting($('heroPaint'),{seed:HERO.seed,g:HERO.g,pig:PIG0,name:NAME0,sym:SYM0},{no:'7'});
+var hero=new Painting($('heroPaint'),{seed:97,g:0,pig:1,name:NAME0,sym:SYM0},{no:'7'});
 var io=new IntersectionObserver(function(es){es.forEach(function(e){
   if(!e.isIntersecting)return;
   var it=items.filter(function(x){return x.p.el===e.target})[0];
@@ -546,19 +579,24 @@ var rio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isInte
 document.body.classList.remove('nojs');doc.classList.add('js');
 
 /* ---------- hero controls ---------- */
+var EXS=[{sym:'TIDE',g:0,pig:1},{sym:'INK',g:3,pig:0},{sym:'QUIET',g:7,pig:4},{sym:'SLOW',g:5,pig:3},{sym:'KOI9',g:1,pig:2},{sym:'DUSK',g:4,pig:5}];
+var exI=0;
+function exSpec(e,i){return{seed:97+i*31,g:e.g,pig:e.pig,name:e.sym,sym:e.sym}}
 var slide=$('slide'),pct=$('pct'),autoNote=$('auto'),chips=[].slice.call(document.querySelectorAll('.ctl .chip'));
 var curN=0,curDone=false,autoOn=true,autoTimers=[];
 function label(n,d){return d?'Complete, seal recorded':(Math.round(n*100/12)+'%, '+n+' of 12 strokes')}
-function setHero(n,d,animate){curN=n;curDone=d;hero.apply(n,d,animate&&!motionOff);slide.value=n;pct.textContent=label(n,d);
+function exLabel(){var e=EXS[exI];$('exName').textContent=e.sym+' · '+GN[e.g][0]+' · '+PIGS[e.pig].n}
+function setHero(n,d,animate){hero.stopWrite();curN=n;curDone=d;hero.apply(n,d,animate&&!motionOff);slide.value=n;pct.textContent=label(n,d);
   chips.forEach(function(c){var cn=+c.dataset.n,cd=c.dataset.done==='1';c.setAttribute('aria-pressed',(cn===n&&cd===d)?'true':'false')})}
-function stopAuto(msg){autoOn=false;autoTimers.forEach(clearTimeout);autoTimers=[];autoNote.textContent=msg||'Example loop stopped.'}
+function stopAuto(msg){autoOn=false;autoTimers.forEach(clearTimeout);autoTimers=[];hero.stopWrite();autoNote.textContent=msg||'Example loop stopped.'}
 function later(fn,ms){autoTimers.push(setTimeout(fn,ms))}
 function loop(){
-  if(!autoOn||motionOff)return;var n=0;setHero(0,false,false);
-  function step(){if(!autoOn)return;
-    if(n<12){n++;setHero(n,false,true);later(step,n===6?900:560)}
-    else{later(function(){setHero(12,true,true);later(function(){setHero(11,false,true);later(function(){setHero(0,false,true);later(loop,1600)},1400)},3000)},700)}}
-  later(step,1100);
+  if(!autoOn||motionOff)return;
+  hero.setSpec(exSpec(EXS[exI],exI));exLabel();hero.apply(0,false,false);pct.textContent=label(0,false);slide.value=0;
+  later(function(){if(!autoOn)return;
+    hero.write({zoom:1.05,onStep:function(k){slide.value=k;pct.textContent=label(k,false)},done:function(){if(!autoOn)return;curN=12;slide.value=12;pct.textContent=label(12,false);
+      later(function(){setHero(0,false,true);later(function(){exI=(exI+1)%EXS.length;loop()},900)},2600)}});
+  },700);
 }
 slide.addEventListener('input',function(){stopAuto('Controls in use. Example loop stopped.');setHero(+slide.value,false,true)});
 chips.forEach(function(c){c.addEventListener('click',function(){stopAuto('Controls in use. Example loop stopped.');setHero(+c.dataset.n,c.dataset.done==='1',true)})});
@@ -568,7 +606,7 @@ hf.addEventListener('pointerdown',function(ev){dragging=true;hf.classList.add('d
 hf.addEventListener('pointermove',function(ev){if(!dragging)return;var n=angleN(ev);if(n!==curN)setHero(n,false,true)});
 function endDrag(){if(!dragging)return;dragging=false;hf.classList.remove('drag');if(curN===12)setHero(12,true,true)}
 hf.addEventListener('pointerup',endDrag);hf.addEventListener('pointercancel',endDrag);
-setHero(0,false,false);if(!motionOff)loop();else{stopAuto('Motion is paused. Use the controls.');setHero(6,false,false)}
+exLabel();setHero(0,false,false);if(!motionOff)loop();else{stopAuto('Motion is paused. Use the controls.');setHero(12,false,false)}
 
 /* ---------- lists ---------- */
 var YES=['There is no function to mint more tokens. The supply is fixed at 1,000,000,000.','No tax, no blacklist, no pause. Selling and sending are never restricted.','All of the supply goes into the pool at launch. The creator receives no tokens.','The pool position is locked in the factory. No function can withdraw or move it.','Name, symbol and painting cannot be changed after launch.'];
@@ -582,83 +620,144 @@ $('flags').innerHTML=FL.map(function(f,i){return'<div class="flag rv" style="--d
 document.querySelectorAll('.rv').forEach(function(el){rio.observe(el)});
 
 /* ---------- wallet (mock) ---------- */
-var connected=false,MOCKADDR='0x7a3F…9c21';
+var connected=false,connecting=false,MOCKADDR='0x7a3F…9c21';
 var toastT=0;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on')},3800)}
 function walletUI(){
-  var w=$('wallet');w.classList.toggle('on',connected);w.setAttribute('aria-pressed',connected?'true':'false');
-  $('walletL').textContent=connected?MOCKADDR:'Connect wallet';$('walletS').textContent=connected?'0x7a3F…':'Connect';
+  var w=$('wallet');w.classList.toggle('on',connected);w.classList.toggle('busy',connecting);w.classList.toggle('primary',!connected);w.classList.toggle('ghost',connected);
+  w.setAttribute('aria-pressed',connected?'true':'false');
+  $('walletL').textContent=connecting?'Connecting…':connected?MOCKADDR:'Connect wallet';$('walletS').textContent=connecting?'…':connected?'0x7a3F…':'Connect';
   w.title=connected?'Click to disconnect (mock wallet)':'Connect a wallet (mock in this prototype)';
-  $('wbTxt').innerHTML=connected?'Connected: '+MOCKADDR+' <span class="mock">EXAMPLE</span> Robinhood Chain':'Wallet not connected.';
-  $('wbBtn').textContent=connected?'Disconnect':'Connect wallet';
-  signUI();
+  $('launchTop').hidden=!connected;
+  $('heroCta').textContent=connecting?'Connecting…':connected?'Launch a coin':'Connect wallet';
+  $('heroNote').textContent=connected?'Connected: '+MOCKADDR+' (example). Six short steps, then one transaction.':'Connect a wallet first. Then launch in six short steps.';
+  if(F.step===5)renderStep(5,true);
 }
-function toggleWallet(){connected=!connected;walletUI();toast(connected?'Mock wallet connected. This prototype contacts no real wallet.':'Mock wallet disconnected.')}
-$('wallet').addEventListener('click',toggleWallet);$('wbBtn').addEventListener('click',toggleWallet);
+function connect(then){if(connected||connecting)return;connecting=true;walletUI();
+  setTimeout(function(){connecting=false;connected=true;walletUI();toast('Mock wallet connected. This prototype contacts no real wallet.');if(then)then()},motionOff?0:800)}
+function disconnect(){connected=false;walletUI();toast('Mock wallet disconnected.');if(!$('flow').hidden)closeFlow()}
+$('wallet').addEventListener('click',function(){connected?disconnect():connect()});
+$('heroCta').addEventListener('click',function(){connected?openFlow():connect()});
+$('launchTop').addEventListener('click',openFlow);
 
-/* ---------- studio ---------- */
-var S={name:'',sym:SYM0,g:HERO.g,pig:PIG0,step:0,max:0,sim:0};
-var sp=new Painting($('studioPaint'),{seed:1,g:S.g,pig:S.pig,name:S.name,sym:S.sym},{no:'1'});
-function seedOf(){var h=2166136261,s=S.name+'|'+S.sym,i;for(i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)%100000}
-function spec(){var sy=S.sym.length>=1?S.sym:'XPRT';return{seed:seedOf(),g:S.g,pig:S.pig,name:S.name.trim()||sy,sym:sy}}
-var rt=0;function repaint(){clearTimeout(rt);rt=setTimeout(function(){var n=sp.n,d=sp.done;sp.setSpec(spec());sp.apply(n,d,false)},140)}
-var STEPN=['Symbol','Gesture and pigment','Preview','Review and sign'];
-function stepsUI(){
-  $('steps').innerHTML=STEPN.map(function(s,i){var cur=i===S.step&&S.step<4,done=i<S.step||S.step===4,can=i<=S.max&&S.step<4;
-    return'<li><button type="button" data-s="'+i+'"'+(cur?' aria-current="step"':'')+(can?'':' disabled')+(done?' class="done"':'')+'><span class="n">'+(done?'✓':(i+1))+'</span><span>'+s+'</span></button></li>'}).join('');
-  [].slice.call($('steps').querySelectorAll('button')).forEach(function(b){b.addEventListener('click',function(){go(+b.dataset.s)})});
+/* ---------- launch flow: one step per screen ---------- */
+var F={step:0,sym:'',name:'',g:0,pig:1,pv:12,pvd:false,written:false,sim:0,ack:false},fp=null;
+var STEPS=['Symbol','Brush','Gesture','Pigment','Preview','Review and sign'];
+function seedOf(){var h=2166136261,s=F.sym+'|'+F.name,i;for(i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)%100000}
+function fspec(){return{seed:seedOf(),g:F.g,pig:F.pig,name:F.name.trim()||F.sym,sym:F.sym||'TIDE'}}
+var lastFocus=null;
+function openFlow(){if(!connected){connect(openFlow);return}
+  lastFocus=document.activeElement;stopAuto('Example paused while the Studio is open.');
+  if(F.step>=6){F.step=0;F.written=false;F.sim=0;F.ack=false}
+  $('flow').hidden=false;document.body.classList.add('lock');requestAnimationFrame(function(){$('flow').classList.add('open')});
+  if(!fp)fp=new Painting($('flPaint'),fspec(),{no:'1'});
+  renderStep(F.step,false);
 }
-function validate(){
-  var n=$('nm').value.trim(),s=$('sy').value.trim(),e='';
-  if(!/^[A-Z0-9]{2,8}$/.test(s))e=s.length<2?'Type at least 2 letters or digits.':'The symbol is 2 to 8 letters or digits, without spaces.';
-  else if(n.length>32)e='The name is at most 32 characters.';
-  $('err1').textContent=e;$('sy').setAttribute('aria-invalid',e&&!/^[A-Z0-9]{2,8}$/.test(s)?'true':'false');return!e;
-}
-function paintFor(step){
-  if(step<=1){sp.apply(12,false,!motionOff);$('paintNote').innerHTML='<span class="ex">EXAMPLE</span> Your symbol, fully written. The contract draws the final painting.'}
-  else if(step===2){setPv(+((pvc.filter(function(c){return c.getAttribute('aria-pressed')==='true'})[0]||{dataset:{n:6}}).dataset.n),false)}
-  else{sp.apply(0,false,!motionOff);$('paintNote').innerHTML='<span class="ex">EXAMPLE</span> A new coin starts at 0 strokes: only the pencil underdrawing shows.'}
-}
-var pvc=[].slice.call($('pvChips').querySelectorAll('.chip'));
-function setPv(n,d){sp.apply(n,d,!motionOff);pvc.forEach(function(c){c.setAttribute('aria-pressed',(+c.dataset.n===n&&(c.dataset.done==='1')===d)?'true':'false')});$('paintNote').innerHTML='<span class="ex">EXAMPLE</span> '+label(n,d)+'.'}
-pvc.forEach(function(c){c.addEventListener('click',function(){setPv(+c.dataset.n,c.dataset.done==='1')})});
+function closeFlow(){var f=$('flow');f.classList.remove('open');document.body.classList.remove('lock');if(fp)fp.stopWrite();
+  setTimeout(function(){f.hidden=true},motionOff?0:260);if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+$('flClose').addEventListener('click',closeFlow);
+$('flBack').addEventListener('click',function(){if(F.step>0&&F.step<6)go(F.step===2?0:F.step-1)});
+document.addEventListener('keydown',function(e){if($('flow').hidden)return;if(e.key==='Escape')closeFlow();
+  if(e.key==='Tab'){var f=[].slice.call($('flow').querySelectorAll('button:not([disabled]),input:not([disabled]),a[href]')).filter(function(x){return x.offsetParent!==null});if(!f.length)return;var a=f[0],z=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}});
 function go(n){
-  if(n>=1&&S.step===0&&!validate())return;
-  if(n>S.max&&n<=3)S.max=n;
-  S.step=n;
-  [].slice.call(document.querySelectorAll('.panel')).forEach(function(p){p.classList.toggle('on',+p.dataset.step===n)});
-  stepsUI();paintFor(n);if(n===3)signUI();
-  var t=$('studio').querySelector('.steps');if(t&&t.getBoundingClientRect().top<0)t.scrollIntoView({behavior:motionOff?'auto':'smooth',block:'start'});
+  var q=$('flQ');if(motionOff){renderStep(n,false);return}
+  q.classList.add('out');setTimeout(function(){renderStep(n,false);q.classList.remove('out');q.classList.add('in');requestAnimationFrame(function(){requestAnimationFrame(function(){q.classList.remove('in')})})},220);
 }
-[].slice.call(document.querySelectorAll('[data-go]')).forEach(function(b){b.addEventListener('click',function(){go(+b.dataset.go)})});
-$('nm').addEventListener('input',function(){S.name=this.value;validate();repaint()});
-$('sy').addEventListener('input',function(){this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'');S.sym=this.value;validate();repaint()});
-$('gests').innerHTML=GN.map(function(g,i){return'<button type="button" class="opt" role="radio" aria-checked="'+(i===S.g)+'" data-g="'+i+'"><b>'+g[0]+'</b><span>'+g[1]+'</span></button>'}).join('');
-$('pigs').innerHTML=PIGS.map(function(p,i){return'<button type="button" class="swb" role="radio" aria-checked="'+(i===S.pig)+'" data-p="'+i+'"><i style="background:'+p.ink+'"></i>'+p.n+'</button>'}).join('');
-function pick(group,attr,key){[].slice.call($(group).children).forEach(function(b){b.addEventListener('click',function(){S[key]=+b.dataset[attr];[].slice.call($(group).children).forEach(function(x){x.setAttribute('aria-checked',x===b?'true':'false')});repaint()})})}
-pick('gests','g','g');pick('pigs','p','pig');
-
-/* sign flow (mock) */
-var ack=$('ack'),sign=$('sign'),signL=$('signL'),stat=$('stat'),signrow=$('signrow');
-function signUI(){
-  var s=S.sim;signrow.classList.toggle('busy',s>0);
-  if(!connected){signL.textContent='Connect wallet to launch';sign.disabled=false;stat.textContent='Connect a wallet to continue. This prototype uses a mock wallet.';return}
-  signL.textContent=s===0?'Launch '+S.sym:s===1?'Simulating…':'Waiting for your signature…';
-  sign.disabled=!ack.checked||s!==0;
-  stat.textContent=s===0?(ack.checked?'Ready. The transaction is simulated before your wallet is asked to sign.':'Tick the box above to continue.'):s===1?'Simulating the transaction against the chain…':'Simulation passed. In the real product your wallet asks you to sign here.';
+function head(n,t,sub){return'<p class="lbl fl-k">Step '+(n+1)+' · '+STEPS[n]+'</p><h2 id="fq" tabindex="-1">'+t+'</h2>'+(sub?'<p class="fl-sub">'+sub+'</p>':'')}
+function repaint(write,fast){fp.setSpec(fspec());if(write&&!motionOff){fp.write({fast:fast,zoom:fast?1.04:1.08})}else fp.apply(12,false,false)}
+function renderStep(n,keep){
+  F.step=n;var q=$('flQ'),fl=$('flow');
+  fl.dataset.view=n===0?'solo':n===1?'center':n>=6?'done':'split';
+  $('flStep').textContent=n<6?'Step '+(n+1)+' of 6':'Done';$('flBar').style.transform='scaleX('+(Math.min(6,n+1)/6)+')';
+  $('flBack').style.visibility=(n>0&&n<6)?'visible':'hidden';
+  var cap=$('flCap');cap.innerHTML='';
+  if(n===0){
+    q.innerHTML=head(0,'What is your coin’s symbol?','It becomes the painting. 2 to 8 letters A to Z or digits 0 to 9.')+
+      '<div class="field"><label class="sr" for="fsy">Symbol</label><input id="fsy" class="symin" type="text" maxlength="8" placeholder="TIDE" value="'+esc(F.sym)+'" autocomplete="off" spellcheck="false" autocapitalize="characters" aria-describedby="ferr"></div>'+
+      '<button type="button" class="linkbtn fl-more" id="fmore" aria-expanded="'+(F.name?'true':'false')+'">Add a longer name (optional)</button>'+
+      '<div class="field" id="fnmw"'+(F.name?'':' hidden')+'><label for="fnm">Name</label><input id="fnm" type="text" maxlength="32" placeholder="Same as the symbol" value="'+esc(F.name)+'" autocomplete="off" spellcheck="false"><span class="hint">Up to 32 characters, shown under the painting.</span></div>'+
+      '<p class="err" id="ferr" role="alert"></p><p class="hint">Symbol and name cannot be changed after launch. Anyone can launch any symbol, including one another coin already uses.</p>'+
+      '<div class="nav2"><button type="button" class="btn primary lg" id="fnext">Write it</button></div>';
+    var inp=$('fsy'),nx=$('fnext');
+    function val(){var v=inp.value.toUpperCase().replace(/[^A-Z0-9]/g,'');if(v!==inp.value)inp.value=v;F.sym=v;var ok=/^[A-Z0-9]{2,8}$/.test(v);nx.disabled=!ok;$('ferr').textContent=v.length===1?'Type at least 2 letters or digits.':'';return ok}
+    inp.addEventListener('input',val);inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&val())go(1)});
+    $('fmore').addEventListener('click',function(){var w=$('fnmw');w.hidden=!w.hidden;this.setAttribute('aria-expanded',String(!w.hidden));if(!w.hidden)$('fnm').focus()});
+    $('fnm').addEventListener('input',function(){F.name=this.value});
+    nx.addEventListener('click',function(){if(val())go(1)});val();
+    setTimeout(function(){inp.focus()},motionOff?0:240);return;
+  }
+  if(n===1){
+    q.innerHTML=head(1,'Writing '+esc(F.sym)+'…','')+'<div class="nav2" id="fb1" style="visibility:hidden"><button type="button" class="btn ghost" id="fagain">Write it again</button><button type="button" class="btn primary lg" id="fnext">Next: gesture</button></div>';
+    var done1=function(){$('fq').textContent=F.sym+', in 12 strokes.';var p=document.createElement('p');p.className='fl-sub';p.textContent='Each stroke is one twelfth of the ink. After launch, the strokes follow the market price, so the painting can be written and unwritten again.';$('fq').after(p);$('fb1').style.visibility='visible';$('fnext').focus()};
+    $('fagain').addEventListener('click',function(){fp.write({done:function(){}})});
+    $('fnext').addEventListener('click',function(){go(2)});
+    cap.innerHTML='<span class="ex">EXAMPLE</span> Illustration. The contract draws the final painting.';
+    fp.setSpec(fspec());fp.apply(0,false,false);setTimeout(function(){fp.write({done:done1})},motionOff?0:420);if(motionOff)done1();
+    $('fq').focus();return;
+  }
+  if(n===2){
+    q.innerHTML=head(2,'How does the brush move?','Eight gestures. Each one changes how every letter is brushed.')+'<div class="opts" role="radiogroup" aria-labelledby="fq" id="fgs">'+GN.map(function(g,i){return'<button type="button" class="opt" role="radio" aria-checked="'+(i===F.g)+'" data-g="'+i+'"><b>'+g[0]+'</b><span>'+g[1]+'</span></button>'}).join('')+'</div>'+
+      '<div class="nav2"><button type="button" class="btn primary lg" id="fnext">Next: pigment</button></div>';
+    [].slice.call($('fgs').children).forEach(function(b){b.addEventListener('click',function(){F.g=+b.dataset.g;[].slice.call($('fgs').children).forEach(function(x){x.setAttribute('aria-checked',x===b?'true':'false')});if($('fcg'))$('fcg').textContent=GN[F.g][0];repaint(true,true)})});
+    $('fnext').addEventListener('click',function(){go(3)});cap.innerHTML='<span class="ex">EXAMPLE</span> Gesture: <b id="fcg">'+GN[F.g][0]+'</b>';
+    if(!keep)repaint(false);$('fq').focus();return;
+  }
+  if(n===3){
+    q.innerHTML=head(3,'Which ink?','Six pigments. The ink, the wash behind it and the seal change together.')+'<div class="sw" role="radiogroup" aria-labelledby="fq" id="fps">'+PIGS.map(function(p,i){return'<button type="button" class="swb" role="radio" aria-checked="'+(i===F.pig)+'" data-p="'+i+'"><i style="background:'+p.ink+'"></i>'+p.n+'</button>'}).join('')+'</div>'+
+      '<div class="nav2"><button type="button" class="btn primary lg" id="fnext">Next: preview</button></div>';
+    [].slice.call($('fps').children).forEach(function(b){b.addEventListener('click',function(){F.pig=+b.dataset.p;[].slice.call($('fps').children).forEach(function(x){x.setAttribute('aria-checked',x===b?'true':'false')});fp.setSpec(fspec());fp.apply(12,false,false);
+      if(!motionOff)$('flFrame').animate([{transform:'scale(.97)'},{transform:'scale(1)'}],{duration:320,easing:'cubic-bezier(.2,1.4,.4,1)'})})});
+    $('fnext').addEventListener('click',function(){go(4)});cap.innerHTML='<span class="ex">EXAMPLE</span> Gesture '+GN[F.g][0]+', pigment '+PIGS[F.pig].n+'.';
+    if(!keep){fp.setSpec(fspec());fp.apply(12,false,false)}$('fq').focus();return;
+  }
+  if(n===4){
+    q.innerHTML=head(4,'It follows the market.','At launch the painting shows only the pencil underdrawing. Strokes appear as the price rises from the launch price and come off if it falls. Only the completion seal is permanent.')+
+      '<div class="chips" role="group" aria-label="Preview state" id="fpv"><button type="button" class="chip" data-n="0">0%</button><button type="button" class="chip" data-n="6">50%</button><button type="button" class="chip" data-n="12">100%</button><button type="button" class="chip" data-n="12" data-done="1">Complete</button></div>'+
+      '<div class="nav2"><button type="button" class="btn primary lg" id="fnext">Next: review</button></div>';
+    var pv=[].slice.call($('fpv').children);
+    function setPv(k,dn){F.pv=k;F.pvd=dn;fp.apply(k,dn,!motionOff);pv.forEach(function(c){c.setAttribute('aria-pressed',(+c.dataset.n===k&&(c.dataset.done==='1')===dn)?'true':'false')});cap.innerHTML='<span class="ex">EXAMPLE</span> '+label(k,dn)+'.'}
+    pv.forEach(function(c){c.addEventListener('click',function(){setPv(+c.dataset.n,c.dataset.done==='1')})});
+    $('fnext').addEventListener('click',function(){go(5)});setPv(0,false);setTimeout(function(){if(F.step===4&&F.pv===0)setPv(6,false)},motionOff?0:900);$('fq').focus();return;
+  }
+  if(n===5){
+    var nm=(F.name.trim()&&F.name.trim()!==F.sym)?esc(F.name.trim())+' ('+esc(F.sym)+')':esc(F.sym);
+    q.innerHTML=head(5,'Review and sign','Read what this one transaction does. Some lines are zeros on purpose.')+
+      '<dl class="bill"><div><dt>Coin</dt><dd>'+nm+'. Gesture '+GN[F.g][0]+', pigment '+PIGS[F.pig].n+'.</dd></div>'+
+      '<div><dt>Launch fee</dt><dd>Exactly 0.0005 ETH, paid to the factory and withdrawable only to the treasury address.</dd></div>'+
+      '<div><dt>Supply</dt><dd>1,000,000,000 tokens, all of them into the pool.</dd><dd class="z">0 to you</dd></div>'+
+      '<div><dt>Pool position</dt><dd>Locked in the factory permanently.</dd><dd class="z">0 ways out</dd></div>'+
+      '<div><dt>First buy</dt><dd>This transaction buys no tokens for you.</dd><dd class="z">0</dd></div>'+
+      '<div><dt>Changes later</dt><dd>Symbol, name and painting cannot be changed.</dd><dd class="z">0</dd></div>'+
+      '<div><dt>Pool fees</dt><dd>You receive 70% of collected pool fees, in amounts nobody can promise. The treasury receives 30%.</dd></div>'+
+      '<div><dt>Wallet limit</dt><dd>First 10 minutes: at most 2% of supply per wallet, you included. Many wallets can get around it.</dd></div>'+
+      '<div><dt>Names</dt><dd>Launches are not screened. A symbol that imitates a brand or another coin can mislead people.</dd></div>'+
+      '<div><dt>You pay</dt><dd>0.0005 ETH plus gas, shown by your wallet after the transaction is simulated.</dd></div></dl>'+
+      '<label class="ack"><input type="checkbox" id="fack"'+(F.ack?' checked':'')+'><span>I have read what this transaction does and the risks above. I understand there is no external audit yet.</span></label>'+
+      '<div class="nav2" id="fsignrow"><button type="button" class="btn primary lg" id="fsign"><svg class="spin" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg><span id="fsignL"></span></button></div>'+
+      '<p class="status" role="status" aria-live="polite" id="fstat"></p><p class="note"><span class="mock">MOCK</span> No wallet is contacted and no transaction is sent from this page.</p>';
+    if(!keep){fp.setSpec(fspec());fp.apply(0,false,!motionOff)}cap.innerHTML='<span class="ex">EXAMPLE</span> A new coin starts at 0 strokes: only the pencil underdrawing shows.';
+    function sUI(){var b=$('fsign'),L=$('fsignL'),st=$('fstat');$('fsignrow').classList.toggle('busy',F.sim>0);
+      if(!connected){L.textContent='Connect wallet to launch';b.disabled=false;st.textContent='Your wallet is disconnected.';return}
+      L.textContent=F.sim===0?'Launch '+F.sym:F.sim===1?'Simulating…':'Waiting for your signature…';b.disabled=!F.ack||F.sim!==0;
+      st.textContent=F.sim===0?(F.ack?'Ready. The transaction is simulated before your wallet is asked to sign.':'Tick the box above to continue.'):F.sim===1?'Simulating the transaction against the chain…':'Simulation passed. In the real product your wallet asks you to sign here.'}
+    $('fack').addEventListener('change',function(){F.ack=this.checked;sUI()});
+    $('fsign').addEventListener('click',function(){if(!connected){connect();return}F.sim=1;sUI();setTimeout(function(){F.sim=2;sUI();setTimeout(function(){F.sim=0;F.ack=false;go(6)},1300)},1100)});
+    sUI();if(!keep)$('fq').focus();return;
+  }
+  if(n>=6){
+    q.innerHTML='<span class="mock">MOCK RESULT</span><h2 id="fq" tabindex="-1">'+esc(F.sym)+' would be launched.</h2><p class="fl-sub">In the real product this screen shows the transaction, the token address and a link to the coin’s page. Here nothing was sent and no coin exists.</p>'+
+      '<div class="nav2"><button type="button" class="btn ghost" id="fclose2">Close</button><button type="button" class="btn primary lg" id="fagain2">Launch another</button></div>';
+    fp.setSpec(fspec());fp.apply(12,true,!motionOff);cap.innerHTML='<span class="ex">EXAMPLE</span> Shown here complete. A real coin starts at 0 strokes.';
+    $('fclose2').addEventListener('click',closeFlow);$('fagain2').addEventListener('click',function(){F={step:0,sym:'',name:'',g:0,pig:1,pv:12,pvd:false,written:false,sim:0,ack:false};go(0)});
+    $('fq').focus();
+  }
 }
-ack.addEventListener('change',signUI);
-sign.addEventListener('click',function(){
-  if(!connected){toggleWallet();return}
-  S.sim=1;signUI();
-  setTimeout(function(){S.sim=2;signUI();setTimeout(function(){S.sim=0;$('resT').textContent=(S.name.trim()&&S.name.trim()!==S.sym?S.name.trim()+' ('+S.sym+')':S.sym)+' would be launched';go(4);sp.apply(0,false,false);ack.checked=false},1300)},1100);
-});
-$('again').addEventListener('click',function(){S.max=0;S.sim=0;go(0)});
-walletUI();stepsUI();sp.setSpec(spec());sp.apply(12,false,false);
+walletUI();
 
 /* ---------- motion toggle ---------- */
 function applyMotion(){doc.classList.toggle('nomo',motionOff);var b=$('mo');b.setAttribute('aria-pressed',motionOff?'true':'false');b.textContent=motionOff?'Play motion':'Pause motion'}
 applyMotion();
-$('mo').addEventListener('click',function(){motionOff=!motionOff;applyMotion();if(motionOff){stopAuto('Motion paused.');setHero(6,false,false);bgClear()}else{autoOn=true;loop();bgKick()}});
+$('mo').addEventListener('click',function(){motionOff=!motionOff;applyMotion();if(motionOff){stopAuto('Motion paused.');setHero(12,false,false);bgClear()}else{autoOn=true;loop();bgKick()}});
 
 /* ---------- live background ---------- */
 var cvs=$('bgcv'),cx=cvs.getContext('2d'),BW=0,BH=0,mx=-9999,my=-9999,pmx=0,pmy=0,lite=false,slow=0,lastT=0,raf=0,ST={};
