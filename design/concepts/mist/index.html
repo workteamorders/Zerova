@@ -66,7 +66,7 @@ h1{font-size:clamp(46px,6.6vw,92px);line-height:.98;margin:var(--s5) 0 var(--s6)
 .lead{max-width:520px;color:var(--dim);margin:0 0 var(--s6);font-size:18px}
 .cta-row{display:flex;flex-wrap:wrap;gap:var(--s3) var(--s4);align-items:center}
 .frame{position:relative;background:var(--bg2);border:1px solid var(--frame);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
-.paint{display:block;width:100%}.paint svg{display:block;width:100%;height:auto}
+.paint{display:block;width:100%;backface-visibility:hidden}.paint svg{display:block;width:100%;height:auto}
 .mp{stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset .5s var(--ease-brush)}
 .seal{opacity:0;transform:scale(1.45) rotate(5deg);transform-box:fill-box;transform-origin:center;transition:opacity .22s ease-out,transform .38s cubic-bezier(.2,1.4,.4,1)}
 .rim{opacity:0;transition:opacity .7s .2s}.done .seal{opacity:1;transform:none}.done .rim{opacity:1}
@@ -514,7 +514,7 @@ Painting.prototype.setDone=function(d){this.done=d;this.svg.classList.toggle('do
 /* writing animation: a brush tip travels each stroke in order; every touch on the paper zooms in and leaves a ripple */
 var SVGNS='http://www.w3.org/2000/svg';
 function sv(tag,at){var e=document.createElementNS(SVGNS,tag);for(var k in at)e.setAttribute(k,at[k]);return e}
-Painting.prototype.stopWrite=function(){if(this.wr){cancelAnimationFrame(this.wr.raf);this.wr=null}if(this.settleRaf)cancelAnimationFrame(this.settleRaf);if(this.svg)this.svg.style.transform='';if(this.cam){this.cam.s=1;this.cam.ip=0;this.cam.imp=0}if(this.fx)this.fx.innerHTML=''};
+Painting.prototype.stopWrite=function(){if(this.wr){cancelAnimationFrame(this.wr.raf);this.wr=null}if(this.settleRaf)cancelAnimationFrame(this.settleRaf);this.el.style.transform='';this.el.style.willChange='';if(this.cam){this.cam.s=1;this.cam.ip=0;this.cam.imp=0}if(this.fx)this.fx.innerHTML=''};
 Painting.prototype.write=function(o){
   o=o||{};var self=this,d=this.data,svg=this.svg;this.stopWrite();this.timers.forEach(clearTimeout);this.timers=[];
   if(motionOff){this.apply(12,false,false);if(o.done)o.done();return}
@@ -529,13 +529,13 @@ Painting.prototype.write=function(o){
   tb.appendChild(sv('ellipse',{cx:-tw*.55,cy:-tw*.12,rx:tw*.55,ry:tw*.18,fill:'#fff','fill-opacity':'.28'}));
   tip.appendChild(tb);this.fx.appendChild(tip);
   var idx=0,dist=0,pause=0,pending=true,last=0,kDone=-1;
-  var Z=o.zoom||1.1,c0=d.bounds?(d.bounds.x0+d.bounds.x1)/2:500,cam=self.cam||{x:c0,y:520,s:1,imp:0,ip:0},tx=cam.x,ty=cam.y,writing=true;self.cam=cam;
+  var cel=self.el,Z=o.zoom||1.1,c0=d.bounds?(d.bounds.x0+d.bounds.x1)/2:500,cam=self.cam||{x:c0,y:520,s:1,imp:0,ip:0},tx=cam.x,ty=cam.y,writing=true;self.cam=cam;
   function camStep(dt,tgtS){var k1=1-Math.exp(-dt/520),k2=1-Math.exp(-dt/700),k3=1-Math.exp(-dt/240);
     cam.x+=(tx-cam.x)*k2;cam.y+=(ty-cam.y)*k2;cam.ip+=(cam.imp-cam.ip)*k3;cam.imp*=Math.exp(-dt/420);
     cam.s+=(tgtS-cam.s)*k1;var sc=cam.s+(cam.s-1)*.35*cam.ip;
-    svg.style.transformOrigin=(cam.x/10).toFixed(2)+'% '+(cam.y/12.5).toFixed(2)+'%';svg.style.transform='scale('+sc.toFixed(4)+')'}
-  function settle(){var lt=0;function f(t){var dt=lt?Math.min(48,t-lt):16;lt=t;camStep(dt,1);if(Math.abs(cam.s-1)>.0015||cam.ip>.01){self.settleRaf=requestAnimationFrame(f)}else{svg.style.transform='';cam.s=1;cam.ip=0}}self.settleRaf=requestAnimationFrame(f)}
-  if(self.settleRaf)cancelAnimationFrame(self.settleRaf);
+    var r=cel.clientWidth/1000,ox=cam.x*r,oy=cam.y*r;cel.style.transform='translate3d('+(ox*(1-sc)).toFixed(2)+'px,'+(oy*(1-sc)).toFixed(2)+'px,0) scale('+sc.toFixed(4)+')'}
+  function settle(){var lt=0;function f(t){var dt=lt?Math.min(48,t-lt):16;lt=t;camStep(dt,1);if(Math.abs(cam.s-1)>.0015||cam.ip>.01){self.settleRaf=requestAnimationFrame(f)}else{cel.style.transform='';cel.style.willChange='';cam.s=1;cam.ip=0}}self.settleRaf=requestAnimationFrame(f)}
+  if(self.settleRaf)cancelAnimationFrame(self.settleRaf);cel.style.transformOrigin='0 0';cel.style.willChange='transform';
   function at(sg,s){var i=1;while(i<sg.L.length-1&&sg.L[i]<s)i++;var a=sg.p[i-1],b=sg.p[i],f=(s-sg.L[i-1])/Math.max(1e-6,sg.L[i]-sg.L[i-1]);f=Math.max(0,Math.min(1,f));return{x:a[0]+(b[0]-a[0])*f,y:a[1]+(b[1]-a[1])*f,ang:Math.atan2(b[1]-a[1],b[0]-a[0])*57.2958}}
   function touch(x,y){
     var H=d.H,ink=self.ink;
@@ -548,7 +548,7 @@ Painting.prototype.write=function(o){
     tb.animate([{transform:'scale(1)'},{transform:'scale(1.35)',offset:.3},{transform:'scale(1)'}],{duration:620,easing:'cubic-bezier(.33,0,.2,1)'});cam.imp=1;
     if(o.onTouch)o.onTouch();
   }
-  function setMasks(k,f){for(var j=0;j<12;j++){var off=j<k?0:j>k?1:1-f;self.masks[j].style.strokeDashoffset=String(off)}
+  var mv=[];function setMasks(k,f){for(var j=0;j<12;j++){var off=j<k?0:j>k?1:Math.round((1-f)*2000)/2000;if(mv[j]!==off){mv[j]=off;self.masks[j].style.strokeDashoffset=String(off)}}
     if(k!==kDone){kDone=k;if(self.cnt)self.cnt.textContent=k+' of 12 strokes';self.n=k;if(o.onStep)o.onStep(k)}}
   function step(t){
     var w=self.wr;if(!w)return;var dt=last?Math.min(48,t-last):16;last=t;
@@ -558,11 +558,11 @@ Painting.prototype.write=function(o){
     if(pending){var p0=at(cur.sg,0);tx=p0.x;ty=p0.y;tip.setAttribute('opacity','1');tip.setAttribute('transform','translate('+p0.x+','+p0.y+') rotate('+p0.ang+')');touch(p0.x,p0.y);pending=false}
     dist+=v*dt;
     while(dist>=cur.sg.len){dist-=cur.sg.len;idx++;
-      if(idx>=P.length){setMasks(12,0);tip.animate([{opacity:1,transform:tip.getAttribute('transform')},{opacity:0,transform:tip.getAttribute('transform')+' translate(-14,-22)'}],{duration:260,fill:'forwards'});
+      if(idx>=P.length){setMasks(12,0);tip.animate([{opacity:1},{opacity:0}],{duration:320,fill:'forwards',easing:'ease-out'});
         self.wr=null;self.n=12;if(self.cnt)self.cnt.textContent='12 of 12 strokes';settle();self.timers.push(setTimeout(function(){if(o.done)o.done()},300));return}
       cur=P[idx];if(cur.sg.st){dist=0;pause=o.fast?120:260;pending=true;tip.setAttribute('opacity','0');setMasks(cur.k,0);w.raf=requestAnimationFrame(step);return}}
     var p=at(cur.sg,dist);tx=p.x;ty=p.y;setMasks(cur.k,(cur.sg.a+dist)/self.data.strokes[cur.k].len);
-    tip.setAttribute('transform','translate('+p.x.toFixed(1)+','+p.y.toFixed(1)+') rotate('+p.ang.toFixed(1)+')');
+    var tr='translate('+p.x.toFixed(1)+','+p.y.toFixed(1)+') rotate('+p.ang.toFixed(0)+')';if(tr!==w.tr){w.tr=tr;tip.setAttribute('transform',tr)}
     w.raf=requestAnimationFrame(step);
   }
   this.wr={raf:requestAnimationFrame(step)};
@@ -790,10 +790,13 @@ function bgStep(t,dt){
     if(p.age>p.life||p.x<-20||p.x>BW+20||p.y<-20||p.y>BH+20){var q=newP();p.x=q.x;p.y=q.y;p.px=q.x;p.py=q.y;p.age=0;p.life=q.life;p.sp=q.sp;p.acc=q.acc;p.lw=q.lw}}
 }
 function bgClear(){cx.clearRect(0,0,BW,BH);cancelAnimationFrame(raf);raf=0}
+var bgTick=0;
 function frame(now){
   raf=0;if(motionOff||document.hidden)return;
-  var dt=Math.min(64,now-(lastT||now));lastT=now;
-  if(dt>26){slow++;if(slow>90&&!lite){lite=true;bgInit()}}else if(slow>0)slow-=.5;
+  /* the wind is a backdrop: it draws every other frame, and not at all while the Studio covers it */
+  if(!$('flow').hidden||(bgTick++&1)){raf=requestAnimationFrame(frame);return}
+  var dt=Math.min(80,now-(lastT||now));lastT=now;
+  if(dt>52){slow++;if(slow>90&&!lite){lite=true;bgInit()}}else if(slow>0)slow-=.5;
   bgStep(now,dt);raf=requestAnimationFrame(frame);
 }
 function bgKick(){if(!raf&&!motionOff&&!document.hidden){lastT=0;raf=requestAnimationFrame(frame)}}
