@@ -1,0 +1,12 @@
+{
+  "name": "zerova-contracts",
+  "private": true,
+  "version": "0.1.0",
+  "description": "ZEROVA contracts for Robinhood Chain. Build with Foundry (forge build).",
+  "scripts": {
+    "glyphs": "node scripts/gen-glyphs.js"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.1.0"
+  }
+}

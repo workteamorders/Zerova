@@ -83,3 +83,16 @@ Also decided: the hero shows a brand ink circle (black and red); each coin's own
 - Network values used for "add / switch network": chain ID 4663 (0x1237), name "Robinhood Chain", currency ETH, RPC https://rpc.mainnet.chain.robinhood.com, explorer https://robinhoodchain.blockscout.com. These match the values recorded above. The explorer choice is still the default from the earlier conflict note.
 - Launching stays closed: `FACTORY` in the page is empty because no ZEROVA contract exists or is deployed. The review step says so and its Launch button stays disabled.
 - Not included: WalletConnect (mobile QR). It needs a WalletConnect project ID that the owner has to create. Until then, phone users open the site inside their wallet app's browser.
+
+## Contracts written without tests, at the owner's request (2026-11-20)
+
+- The owner asked to skip testing ("tidak perlu di tes-tes lagi, langsung saja") and to skip WalletConnect.
+- Contracts are in `contracts/` (Solidity 0.8.26, OpenZeppelin 5.1.0, evm "paris", via-IR). They compile with solc 0.8.26
+  (sizes: factory 11.6 KB, renderer 16.4 KB, Enso 6.1 KB, token 2.3 KB). No unit, fuzz or fork tests were run; no audit.
+  The renderer alone was executed in a local EVM to check that it returns valid SVG and metadata.
+- No TickMath on chain: the launch price is passed to the factory constructor as `START_TICK` and two sqrt prices from
+  `scripts/tick-from-fdv.py`. Each launch checks the pool's tick and price exactly and reverts on any mismatch, which also
+  rejects a pool created in advance at another price.
+- The on-chain painting is a simplified brush (uniform stroke width, dry streaks, skew, jitter). The web previews use a richer
+  brush, so the Studio's review step now shows the on-chain renderer's output once the factory address is set.
+- Not built yet: on-chain gallery reading, fee collection and seal buttons on the site.

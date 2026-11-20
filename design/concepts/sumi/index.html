@@ -236,8 +236,9 @@ body.lock{overflow:hidden}
 #flow[data-view="solo"] .fl-body{grid-template-columns:1fr;max-width:760px}
 #flow[data-view="solo"] .fl-art{display:none}
 #flow[data-view="solo"] .fl-q{text-align:left}
-#flow[data-view="done"] .fl-body{grid-template-columns:1fr;justify-items:center;text-align:center;gap:var(--s4)}
-#flow[data-view="done"] .fl-art{width:min(300px,70vw,32vh)}
+#flow[data-view="done"] .fl-body{grid-template-columns:1fr;justify-items:center;text-align:center;gap:var(--s4);align-items:start}
+#flow .bill dd a{word-break:break-all}
+#flow[data-view="done"] .fl-art{width:min(260px,60vw,28vh)}
 #flow[data-view="done"] .fl-q{display:flex;flex-direction:column;align-items:center}
 #flow[data-view="done"] .fl-sub{margin-left:auto;margin-right:auto}
 #flow[data-view="center"] .fl-body{grid-template-columns:1fr;justify-items:center;text-align:center;gap:var(--s5)}
@@ -779,6 +780,24 @@ document.querySelectorAll('.rv').forEach(function(el){rio.observe(el)});
 var CHAIN={id:4663,hex:'0x1237',name:'Robinhood Chain',rpc:'https://rpc.mainnet.chain.robinhood.com',explorer:'https://robinhoodchain.blockscout.com'};
 /* Set this to the deployed ZerovaFactory address. Empty means launching is closed. */
 var FACTORY='';
+var FEE_HEX='0x1c6bf52634000'; /* 0.0005 ETH, exactly LAUNCH_FEE */
+var SEL={launch:'0x07c97404',enso:'0xce40c7cd',tokenURI:'0xc87b56dd',renderer:'0x8ada6b0f',image:'0xd91ed2db'};
+var LAUNCHED_TOPIC='0x87a2f99de0f42bdf36bd4d3ff92bab2960edce0c21bf1e1f03653cbbab43dd23';
+var ERRS={'0x917f1a53':'The fee must be exactly 0.0005 ETH.','0x153736cd':'The name is not allowed. Use 1 to 32 letters, digits, spaces and . , \' ! ? -','0x73a289b0':'The symbol must be 2 to 8 letters A to Z or digits.','0x94fcf010':'Unknown gesture or pigment.','0xbed06041':'The pool for this token was already created at another price. Try again; a new token address is used.','0xc301e07e':'The pool position could not be created.','0x90b8ec18':'A transfer failed.','0xed3ba6a6':'Busy, try again.','0x5426a580':'Wallet limit reached.'};
+/* minimal ABI helpers */
+function h64(n){return BigInt(n).toString(16).padStart(64,'0')}
+function hexStr(str){return Array.from(new TextEncoder().encode(str)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}
+function encStr(str){var h=hexStr(str);return h64(h.length/2)+h+'0'.repeat((64-(h.length%64))%64)}
+function encLaunch(name,sym,g,p){var a=encStr(name),b=encStr(sym);return SEL.launch+h64(128)+h64(128+a.length/2)+h64(g)+h64(p)+a+b}
+function encImage(name,sym,g,p,n){var a=encStr(name),b=encStr(sym);return SEL.image+h64(0)+h64(256)+h64(256+a.length/2)+h64(g)+h64(p)+h64(n)+h64(0)+h64(0)+a+b}
+function decStr(hex){hex=hex.replace(/^0x/,'');var off=parseInt(hex.slice(0,64),16)*2,len=parseInt(hex.slice(off,off+64),16)*2,body=hex.slice(off+64,off+64+len),bytes=new Uint8Array(body.length/2);for(var i=0;i<bytes.length;i++)bytes[i]=parseInt(body.substr(i*2,2),16);return new TextDecoder().decode(bytes)}
+function decAddr(hex){return '0x'+hex.replace(/^0x/,'').slice(24,64)}
+function ethCall(to,data){return prov.request({method:'eth_call',params:[{to:to,data:data},'latest']})}
+function revertMsg(err){var d=null,e=err;for(var k=0;k<4&&e&&!d;k++){if(typeof e.data==='string')d=e.data;else if(e.data&&typeof e.data.data==='string')d=e.data.data;e=e.error||e.cause||(e.data&&e.data.originalError)}
+  if(d&&d.length>=10&&ERRS[d.slice(0,10)])return ERRS[d.slice(0,10)];if(err&&err.code===4001)return'You rejected the request in your wallet.';return(err&&(err.shortMessage||err.message))||'The transaction would fail.'}
+var ENSO=null,RENDERER=null;
+function contracts(){if(ENSO)return Promise.resolve();return ethCall(FACTORY,SEL.enso).then(function(r){ENSO=decAddr(r);return ethCall(ENSO,SEL.renderer)}).then(function(r){RENDERER=decAddr(r)})}
+function nameOk(n){return n.length>=1&&n.length<=32&&/^[A-Za-z0-9 .,'!?-]+$/.test(n)&&n[0]!==' '&&n[n.length-1]!==' '}
 var WALLETS=[],prov=null,provInfo=null,account=null,chainId=null,balanceWei=null,connecting=false,connected=false;
 var toastT=0;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on')},4200)}
 function short(a){return a?a.slice(0,6)+'…'+a.slice(-4):''}
@@ -863,6 +882,16 @@ function go(n){
 }
 function head(n,t,sub){return'<p class="lbl fl-k">Step '+(n+1)+' · '+STEPS[n]+'</p><h2 id="fq" tabindex="-1">'+t+'</h2>'+(sub?'<p class="fl-sub">'+sub+'</p>':'')}
 function repaint(write,fast){fp.setSpec(fspec());if(write&&!motionOff){fp.write({fast:fast,zoom:fast?1.06:1.12})}else fp.apply(12,false,false)}
+function doLaunch(ui){
+  if(!F.ack||F.sim)return;var name=F.name.trim()||F.sym,data=encLaunch(name,F.sym,F.g,F.pig),tx={from:account,to:FACTORY,value:FEE_HEX,data:data};
+  F.err='';F.sim=1;ui();
+  prov.request({method:'eth_call',params:[tx,'latest']}).then(function(){F.sim=2;ui();return prov.request({method:'eth_sendTransaction',params:[tx]})})
+  .then(function(hash){F.tx=hash;F.sim=3;ui();return waitReceipt(hash)})
+  .then(function(rc){if(!rc||rc.status!=='0x1')throw new Error('The transaction failed on chain.');
+    var log=(rc.logs||[]).filter(function(l){return l.address.toLowerCase()===FACTORY.toLowerCase()&&l.topics[0]===LAUNCHED_TOPIC})[0];if(!log)throw new Error('Launched, but the launch event was not found. Check the transaction.');
+    F.res={id:BigInt(log.topics[1]).toString(),token:decAddr(log.topics[2]),pool:decAddr(log.data.slice(0,66)),tx:F.tx};F.sim=0;F.ack=false;refreshBalance();go(6)})
+  .catch(function(err){F.sim=0;F.err=revertMsg(err);ui()})}
+function waitReceipt(hash){return new Promise(function(res,rej){var t0=Date.now();(function poll(){prov.request({method:'eth_getTransactionReceipt',params:[hash]}).then(function(rc){if(rc)res(rc);else if(Date.now()-t0>240000)rej(new Error('Still not confirmed after 4 minutes. Check the transaction in the explorer.'));else setTimeout(poll,1500)}).catch(function(){setTimeout(poll,2500)})})()})}
 function renderStep(n,keep){
   F.step=n;var q=$('flQ'),fl=$('flow');
   fl.dataset.view=n===0?'solo':n===1?'center':n>=6?'done':'split';
@@ -880,7 +909,7 @@ function renderStep(n,keep){
     function val(){var v=inp.value.toUpperCase().replace(/[^A-Z0-9]/g,'');if(v!==inp.value)inp.value=v;F.sym=v;var ok=/^[A-Z0-9]{2,8}$/.test(v);nx.disabled=!ok;$('ferr').textContent=v.length===1?'Type at least 2 letters or digits.':'';return ok}
     inp.addEventListener('input',val);inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&val())go(1)});
     $('fmore').addEventListener('click',function(){var w=$('fnmw');w.hidden=!w.hidden;this.setAttribute('aria-expanded',String(!w.hidden));if(!w.hidden)$('fnm').focus()});
-    $('fnm').addEventListener('input',function(){F.name=this.value});
+    $('fnm').addEventListener('input',function(){F.name=this.value;var n=this.value.trim();$('ferr').textContent=n&&!nameOk(n)?'The name allows letters, digits, spaces and . , \' ! ? - (up to 32).':'';nx.disabled=!/^[A-Z0-9]{2,8}$/.test(F.sym)||(n&&!nameOk(n))});
     nx.addEventListener('click',function(){if(val())go(1)});val();
     setTimeout(function(){inp.focus()},motionOff?0:240);return;
   }
@@ -940,15 +969,26 @@ function renderStep(n,keep){
       if(!onChain()){L.textContent='Switch to Robinhood Chain';b.disabled=false;st.textContent='Your wallet is on another network (chain '+(chainId?parseInt(chainId,16):'?')+').';return}
       var need=500000000000000n;if(balanceWei!=null&&BigInt(balanceWei)<need){L.textContent='Not enough ETH';b.disabled=true;st.textContent='The launch fee is 0.0005 ETH plus gas. This wallet holds '+ethOf(balanceWei)+' ETH.';return}
       if(!FACTORY){L.textContent='Launch '+F.sym;b.disabled=true;st.innerHTML='<b>Launching is not open yet.</b> The ZEROVA contracts are not deployed on Robinhood Chain. Nothing is sent from this page until they are.';return}
-      L.textContent='Launch '+F.sym;b.disabled=!F.ack;st.textContent=F.ack?'Ready.':'Tick the box above to continue.'}
+      if(F.sim===1){L.textContent='Checking…';b.disabled=true;$('fsignrow').classList.add('busy');st.textContent='Simulating the launch against Robinhood Chain…';return}
+      if(F.sim===2){L.textContent='Confirm in your wallet';b.disabled=true;$('fsignrow').classList.add('busy');st.textContent='Your wallet shows the transaction: 0.0005 ETH plus gas, to the ZEROVA factory.';return}
+      if(F.sim===3){L.textContent='Launching…';b.disabled=true;$('fsignrow').classList.add('busy');st.innerHTML='Sent. Waiting for Robinhood Chain to include it. <a href="'+CHAIN.explorer+'/tx/'+F.tx+'" target="_blank" rel="noopener">View transaction</a>';return}
+      L.textContent='Launch '+F.sym;b.disabled=!F.ack;st.innerHTML=F.err?'<b>'+esc(F.err)+'</b>':(F.ack?'Ready. The launch is simulated first; then your wallet asks you to sign.':'Tick the box above to continue.')}
     $('fack').addEventListener('change',function(){F.ack=this.checked;sUI()});
-    $('fsign').addEventListener('click',function(){if(!connected){connect(function(){renderStep(5,true)});return}if(!onChain()){switchChain();return}});
+    $('fsign').addEventListener('click',function(){if(!connected){connect(function(){renderStep(5,true)});return}if(!onChain()){switchChain();return}doLaunch(sUI)});
+    if(FACTORY&&connected&&onChain()&&!keep){contracts().then(function(){return ethCall(RENDERER,encImage(F.name.trim()||F.sym,F.sym,F.g,F.pig,12))}).then(function(r){if(F.step!==5)return;$('flPaint').innerHTML=decStr(r);cap.innerHTML='Drawn by the ZEROVA renderer on Robinhood Chain, shown at 12 strokes. A new coin starts at 0.'}).catch(function(){})}
     sUI();if(!keep)$('fq').focus();return;
   }
   if(n>=6){
-    q.innerHTML='<span class="mock">MOCK RESULT</span><h2 id="fq" tabindex="-1">'+esc(F.sym)+' would be launched.</h2><p class="fl-sub">In the real product this screen shows the transaction, the token address and a link to the coin’s page. Here nothing was sent and no coin exists.</p>'+
-      '<div class="nav2"><button type="button" class="btn ghost" id="fclose2">Close</button><button type="button" class="btn primary lg" id="fagain2">Launch another</button></div>';
-    fp.setSpec(fspec());fp.apply(12,true,!motionOff);cap.innerHTML='<span class="ex">EXAMPLE</span> Shown here complete. A real coin starts at 0 strokes.';
+    var R=F.res||{};
+    q.innerHTML='<p class="lbl fl-k">Launched on Robinhood Chain</p><h2 id="fq" tabindex="-1">'+esc(F.sym)+' is live.</h2>'+
+      '<p class="fl-sub">Your Enso #'+esc(R.id||'')+' is in your wallet. The whole supply is in the pool and the position is locked. The painting starts at 0 strokes and follows the price from here.</p>'+
+      '<dl class="bill"><div><dt>Token</dt><dd><a href="'+CHAIN.explorer+'/token/'+R.token+'" target="_blank" rel="noopener">'+esc(R.token||'')+'</a></dd></div>'+
+      '<div><dt>Pool</dt><dd><a href="'+CHAIN.explorer+'/address/'+R.pool+'" target="_blank" rel="noopener">'+esc(R.pool||'')+'</a></dd></div>'+
+      '<div><dt>Transaction</dt><dd><a href="'+CHAIN.explorer+'/tx/'+R.tx+'" target="_blank" rel="noopener">'+esc(R.tx||'')+'</a></dd></div></dl>'+
+      '<div class="nav2"><button type="button" class="btn ghost" id="fcopy">Copy token address</button><button type="button" class="btn ghost" id="fclose2">Close</button><button type="button" class="btn primary lg" id="fagain2">Launch another</button></div>';
+    cap.innerHTML='Loading your Enso from Robinhood Chain…';
+    contracts().then(function(){return ethCall(ENSO,SEL.tokenURI+h64(R.id))}).then(function(r){var uri=decStr(r),j=JSON.parse(atob(uri.split(',')[1]));$('flPaint').innerHTML='<img src="'+j.image+'" alt="'+esc(j.name)+'" style="width:100%;display:block">';cap.innerHTML=esc(j.name)+', read from the contract.'}).catch(function(){cap.textContent='The painting is on chain; your wallet or the explorer shows it.'});
+    $('fcopy').addEventListener('click',function(){navigator.clipboard&&navigator.clipboard.writeText(R.token).then(function(){toast('Token address copied.')})});
     $('fclose2').addEventListener('click',closeFlow);$('fagain2').addEventListener('click',function(){F={step:0,sym:'',name:'',g:0,pig:1,pv:12,pvd:false,written:false,sim:0,ack:false};go(0)});
     $('fq').focus();
   }

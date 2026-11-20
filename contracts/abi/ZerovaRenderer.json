@@ -1,0 +1,195 @@
+[
+ {
+  "inputs": [
+   {
+    "internalType": "uint8",
+    "name": "g",
+    "type": "uint8"
+   }
+  ],
+  "name": "brush",
+  "outputs": [
+   {
+    "components": [
+     {
+      "internalType": "string",
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "internalType": "uint256",
+      "name": "width",
+      "type": "uint256"
+     },
+     {
+      "internalType": "string",
+      "name": "dry",
+      "type": "string"
+     },
+     {
+      "internalType": "int256",
+      "name": "skew",
+      "type": "int256"
+     },
+     {
+      "internalType": "uint256",
+      "name": "jitter",
+      "type": "uint256"
+     },
+     {
+      "internalType": "string",
+      "name": "cap",
+      "type": "string"
+     }
+    ],
+    "internalType": "struct ZerovaRenderer.Brush",
+    "name": "",
+    "type": "tuple"
+   }
+  ],
+  "stateMutability": "pure",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "id",
+    "type": "uint256"
+   },
+   {
+    "internalType": "string",
+    "name": "name",
+    "type": "string"
+   },
+   {
+    "internalType": "string",
+    "name": "symbol",
+    "type": "string"
+   },
+   {
+    "internalType": "uint8",
+    "name": "gesture",
+    "type": "uint8"
+   },
+   {
+    "internalType": "uint8",
+    "name": "pig",
+    "type": "uint8"
+   },
+   {
+    "internalType": "uint8",
+    "name": "strokes",
+    "type": "uint8"
+   },
+   {
+    "internalType": "bool",
+    "name": "sealed_",
+    "type": "bool"
+   },
+   {
+    "internalType": "uint64",
+    "name": "seed",
+    "type": "uint64"
+   }
+  ],
+  "name": "image",
+  "outputs": [
+   {
+    "internalType": "string",
+    "name": "",
+    "type": "string"
+   }
+  ],
+  "stateMutability": "pure",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint8",
+    "name": "p",
+    "type": "uint8"
+   }
+  ],
+  "name": "pigment",
+  "outputs": [
+   {
+    "internalType": "string",
+    "name": "name",
+    "type": "string"
+   },
+   {
+    "internalType": "string",
+    "name": "ink",
+    "type": "string"
+   },
+   {
+    "internalType": "string",
+    "name": "wash",
+    "type": "string"
+   },
+   {
+    "internalType": "string",
+    "name": "seal",
+    "type": "string"
+   }
+  ],
+  "stateMutability": "pure",
+  "type": "function"
+ },
+ {
+  "inputs": [
+   {
+    "internalType": "uint256",
+    "name": "id",
+    "type": "uint256"
+   },
+   {
+    "internalType": "string",
+    "name": "name",
+    "type": "string"
+   },
+   {
+    "internalType": "string",
+    "name": "symbol",
+    "type": "string"
+   },
+   {
+    "internalType": "uint8",
+    "name": "gesture",
+    "type": "uint8"
+   },
+   {
+    "internalType": "uint8",
+    "name": "pig",
+    "type": "uint8"
+   },
+   {
+    "internalType": "uint8",
+    "name": "strokes",
+    "type": "uint8"
+   },
+   {
+    "internalType": "bool",
+    "name": "sealed_",
+    "type": "bool"
+   },
+   {
+    "internalType": "uint64",
+    "name": "seed",
+    "type": "uint64"
+   }
+  ],
+  "name": "tokenURI",
+  "outputs": [
+   {
+    "internalType": "string",
+    "name": "",
+    "type": "string"
+   }
+  ],
+  "stateMutability": "pure",
+  "type": "function"
+ }
+]
