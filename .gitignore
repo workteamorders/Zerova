@@ -9,3 +9,8 @@ out/
 cache/
 broadcast/
 .DS_Store
+
+# raw stock footage (large, licensed separately)
+footage/*
+!footage/SHOTLIST.md
+!footage/SOURCES.csv
