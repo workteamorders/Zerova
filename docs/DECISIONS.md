@@ -96,3 +96,24 @@ Also decided: the hero shows a brand ink circle (black and red); each coin's own
 - The on-chain painting is a simplified brush (uniform stroke width, dry streaks, skew, jitter). The web previews use a richer
   brush, so the Studio's review step now shows the on-chain renderer's output once the factory address is set.
 - Not built yet: on-chain gallery reading, fee collection and seal buttons on the site.
+
+## Mainnet readiness pass (2026-11-20)
+
+- The owner asked to make ZEROVA ready for mainnet. Testing was added back for that reason; the earlier "no tests" note
+  above no longer describes the code.
+- Found by review and confirmed in the local test: token addresses came from plain CREATE, so the next token address was
+  predictable. Anyone could create its pool in advance at another price, every launch would revert with `PoolPrice`, and
+  with no admin the factory would stay blocked. Fix: `launch(name, symbol, gesture, pigment, salt)` creates the token with
+  CREATE2 and the salt `keccak256(caller, salt, launchCount)`. The site sends a fresh random salt on every attempt.
+  New selector `0xe1691fc0`.
+- `contracts/test/local/run.mjs` (`npm test`): local EVM with the real Uniswap V3 bytecode from npm. 87 checks pass,
+  including the griefing case, both token orders, wallet limit, seal on a busy pool and the 70 / 30 split.
+- `contracts/test/Fork.t.sol`: the same kind of checks on a fork of mainnet with the real Uniswap addresses. It also ran in
+  the local harness. The sandbox cannot reach the Robinhood Chain RPC, so the fork run itself is for the owner (DEPLOY.md step 2).
+- `contracts/script/Deploy.s.sol`: refuses any chain but 4663, checks the Uniswap and WETH facts, deploys renderer and factory.
+- Seal uses 64 price history slots. On a coin that trades in more than 64 blocks within 10 minutes, `seal` reverts with
+  `OLD` until trading calms down. Accepted and documented; the site explains the error.
+- Explorer: Blockscout (robinhoodchain.blockscout.com) is the official explorer per Blockscout's Robinhood Chain docs. Kept.
+- WETH `0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73` is not listed on Uniswap's Robinhood Chain page; the fork test and the
+  deploy script check `NonfungiblePositionManager.WETH9()` equals it before anything is deployed.
+- Still open: no external audit. The fork test and one real launch by the owner come before any announcement.

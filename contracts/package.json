@@ -2,11 +2,23 @@
   "name": "zerova-contracts",
   "private": true,
   "version": "0.1.0",
-  "description": "ZEROVA contracts for Robinhood Chain. Build with Foundry (forge build).",
+  "description": "ZEROVA contracts for Robinhood Chain. Build and deploy with Foundry; local end-to-end test with npm test.",
   "scripts": {
-    "glyphs": "node scripts/gen-glyphs.js"
+    "glyphs": "node scripts/gen-glyphs.js",
+    "test": "node test/local/run.mjs"
   },
   "dependencies": {
     "@openzeppelin/contracts": "5.1.0"
+  },
+  "devDependencies": {
+    "@ethereumjs/block": "5.3.0",
+    "@ethereumjs/common": "4.4.0",
+    "@ethereumjs/util": "9.1.0",
+    "@ethereumjs/vm": "8.1.1",
+    "@uniswap/swap-router-contracts": "1.3.1",
+    "@uniswap/v3-core": "1.0.1",
+    "@uniswap/v3-periphery": "1.4.4",
+    "ethers": "6.13.4",
+    "solc": "0.8.26"
   }
 }

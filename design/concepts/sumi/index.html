@@ -581,7 +581,7 @@ footer .soc a{width:36px;height:36px}
   <div class="wrap">
     <span>Digital collectibles and tokens. Not financial advice. No external audit yet. Not affiliated with Robinhood Markets, Robinhood Chain, Uniswap or any marketplace.</span>
     <span class="soc" id="socF"></span>
-    <span>Concept prototype. Paintings are illustrative drawings, not the on-chain renderer. <button type="button" class="mo" id="mo" aria-pressed="false">Pause motion</button></span>
+    <span>Studio previews and EXAMPLE paintings are illustrations; every launched coin&#8217;s Enso is drawn by the on-chain renderer. <button type="button" class="mo" id="mo" aria-pressed="false">Pause motion</button></span>
   </div>
 </footer>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -995,20 +995,24 @@ var CHAIN={id:4663,hex:'0x1237',name:'Robinhood Chain',rpc:'https://rpc.mainnet.
 /* Set this to the deployed ZerovaFactory address. Empty means launching is closed. */
 var FACTORY='';
 var FEE_HEX='0x1c6bf52634000'; /* 0.0005 ETH, exactly LAUNCH_FEE */
-var SEL={launch:'0x07c97404',enso:'0xce40c7cd',tokenURI:'0xc87b56dd',renderer:'0x8ada6b0f',image:'0xd91ed2db'};
+var SEL={launch:'0xe1691fc0',enso:'0xce40c7cd',tokenURI:'0xc87b56dd',renderer:'0x8ada6b0f',image:'0xd91ed2db'};
 var LAUNCHED_TOPIC='0x87a2f99de0f42bdf36bd4d3ff92bab2960edce0c21bf1e1f03653cbbab43dd23';
-var ERRS={'0x917f1a53':'The fee must be exactly 0.0005 ETH.','0x153736cd':'The name is not allowed. Use 1 to 32 letters, digits, spaces and . , \' ! ? -','0x73a289b0':'The symbol must be 2 to 8 letters A to Z or digits.','0x94fcf010':'Unknown gesture or pigment.','0xbed06041':'The pool for this token was already created at another price. Try again; a new token address is used.','0xc301e07e':'The pool position could not be created.','0x90b8ec18':'A transfer failed.','0xed3ba6a6':'Busy, try again.','0x5426a580':'Wallet limit reached.'};
+var ERRS={'0x917f1a53':'The fee must be exactly 0.0005 ETH.','0x153736cd':'The name is not allowed. Use 1 to 32 letters, digits, spaces and . , \' ! ? -','0x73a289b0':'The symbol must be 2 to 8 letters A to Z or digits.','0x94fcf010':'Unknown gesture or pigment.','0xbed06041':'The pool for this token address already existed at another price. Press launch again: each attempt uses a new token address.','0xc301e07e':'The pool position could not be created.','0x90b8ec18':'A transfer failed.','0xed3ba6a6':'Busy, try again.','0x5426a580':'Wallet limit reached.'};
 /* minimal ABI helpers */
 function h64(n){return BigInt(n).toString(16).padStart(64,'0')}
 function hexStr(str){return Array.from(new TextEncoder().encode(str)).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}
 function encStr(str){var h=hexStr(str);return h64(h.length/2)+h+'0'.repeat((64-(h.length%64))%64)}
-function encLaunch(name,sym,g,p){var a=encStr(name),b=encStr(sym);return SEL.launch+h64(128)+h64(128+a.length/2)+h64(g)+h64(p)+a+b}
+function randSalt(){var b=new Uint8Array(32);crypto.getRandomValues(b);return Array.from(b).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
+/* launch(name, symbol, gesture, pigment, salt): a fresh random salt per attempt gives a token address nobody can predict */
+function encLaunch(name,sym,g,p,salt){var a=encStr(name),b=encStr(sym);return SEL.launch+h64(160)+h64(160+a.length/2)+h64(g)+h64(p)+salt+a+b}
 function encImage(name,sym,g,p,n){var a=encStr(name),b=encStr(sym);return SEL.image+h64(0)+h64(256)+h64(256+a.length/2)+h64(g)+h64(p)+h64(n)+h64(0)+h64(0)+a+b}
 function decStr(hex){hex=hex.replace(/^0x/,'');var off=parseInt(hex.slice(0,64),16)*2,len=parseInt(hex.slice(off,off+64),16)*2,body=hex.slice(off+64,off+64+len),bytes=new Uint8Array(body.length/2);for(var i=0;i<bytes.length;i++)bytes[i]=parseInt(body.substr(i*2,2),16);return new TextDecoder().decode(bytes)}
 function decAddr(hex){return '0x'+hex.replace(/^0x/,'').slice(24,64)}
 function ethCall(to,data){return rpcBatch([{method:'eth_call',params:[{to:to,data:data},'latest']}]).then(function(r){if(r[0].error)throw r[0].error;return r[0].result})}
 function revertMsg(err){var d=null,e=err;for(var k=0;k<4&&e&&!d;k++){if(typeof e.data==='string')d=e.data;else if(e.data&&typeof e.data.data==='string')d=e.data.data;e=e.error||e.cause||(e.data&&e.data.originalError)}
-  if(d&&d.length>=10&&ERRS[d.slice(0,10)])return ERRS[d.slice(0,10)];if(err&&err.code===4001)return'You rejected the request in your wallet.';return(err&&(err.shortMessage||err.message))||'The transaction would fail.'}
+  if(d&&d.length>=10&&ERRS[d.slice(0,10)])return ERRS[d.slice(0,10)];
+  if(d&&d.slice(0,10)==='0x08c379a0'){var why='';try{why=decStr('0x'+d.slice(10))}catch(x){}if(STRERR[why])return STRERR[why];if(why)return 'The transaction would fail: '+why+'.'}if(err&&err.code===4001)return'You rejected the request in your wallet.';return(err&&(err.shortMessage||err.message))||'The transaction would fail.'}
+var STRERR={OLD:'The pool does not have 10 minutes of price history yet, or it traded in so many blocks that the history is shorter. Try again after 10 calmer minutes.',TF:'A token transfer failed. In the first 10 minutes after a launch, one wallet may hold at most 2% of the supply.',STF:'A token transfer failed. Check the allowance and balance.'};
 var ENSO=null,RENDERER=null;
 function contracts(){if(ENSO)return Promise.resolve();return ethCall(FACTORY,SEL.enso).then(function(r){ENSO=decAddr(r);return ethCall(ENSO,SEL.renderer)}).then(function(r){RENDERER=decAddr(r)})}
 function nameOk(n){return n.length>=1&&n.length<=32&&/^[A-Za-z0-9 .,'!?-]+$/.test(n)&&n[0]!==' '&&n[n.length-1]!==' '}
@@ -1098,7 +1102,7 @@ function go(n){
 function head(n,t,sub){return'<p class="lbl fl-k">Step '+(n+1)+' · '+STEPS[n]+'</p><h2 id="fq" tabindex="-1">'+t+'</h2>'+(sub?'<p class="fl-sub">'+sub+'</p>':'')}
 function repaint(write,fast){fp.setSpec(fspec());if(write&&!motionOff){fp.write({fast:fast,zoom:fast?1.06:1.12})}else fp.apply(12,false,false)}
 function doLaunch(ui){
-  if(!F.ack||F.sim)return;var name=F.name.trim()||F.sym,data=encLaunch(name,F.sym,F.g,F.pig),tx={from:account,to:FACTORY,value:FEE_HEX,data:data};
+  if(!F.ack||F.sim)return;var name=F.name.trim()||F.sym,data=encLaunch(name,F.sym,F.g,F.pig,randSalt()),tx={from:account,to:FACTORY,value:FEE_HEX,data:data};
   F.err='';F.sim=1;ui();
   prov.request({method:'eth_call',params:[tx,'latest']}).then(function(){F.sim=2;ui();return prov.request({method:'eth_sendTransaction',params:[tx]})})
   .then(function(hash){F.tx=hash;F.sim=3;ui();return waitReceipt(hash)})

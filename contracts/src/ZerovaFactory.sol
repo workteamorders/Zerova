@@ -115,7 +115,10 @@ contract ZerovaFactory {
     /// @param symbol 2 to 8 characters: A to Z and 0 to 9
     /// @param gesture 0 to 7
     /// @param pigment 0 to 5
-    function launch(string calldata name, string calldata symbol, uint8 gesture, uint8 pigment)
+    /// @param salt Random value chosen by the caller. With the caller's address and the launch count it sets the
+    /// token address, so nobody can predict that address and create its pool at another price before the launch.
+    /// If a launch still reverts with PoolPrice, sending it again with a new salt uses a new address.
+    function launch(string calldata name, string calldata symbol, uint8 gesture, uint8 pigment, bytes32 salt)
         external
         payable
         nonReentrant
@@ -126,7 +129,9 @@ contract ZerovaFactory {
         _checkSymbol(bytes(symbol));
         if (gesture >= 8 || pigment >= 6) revert BadChoice();
 
-        ZerovaToken t = new ZerovaToken(name, symbol, address(POSITION_MANAGER));
+        ZerovaToken t = new ZerovaToken{salt: keccak256(abi.encode(msg.sender, salt, _launches.length))}(
+            name, symbol, address(POSITION_MANAGER)
+        );
         token = address(t);
         bool isToken0 = token < WETH;
         (address token0, address token1) = isToken0 ? (token, WETH) : (WETH, token);
