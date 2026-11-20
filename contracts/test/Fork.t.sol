@@ -115,16 +115,29 @@ contract ForkTest {
         require(e.strokes(id) == 0, "strokes at launch");
     }
 
-    function test_launchBothOrders() public {
-        bool seen0;
-        bool seen1;
-        for (uint256 i; i < 40 && !(seen0 && seen1); ++i) {
-            (uint256 id, address token) = _launch();
-            _check(id, token);
-            if (token < WETH) seen0 = true;
-            else seen1 = true;
+    /// WETH on Robinhood Chain sorts low (0x0B...), so most token addresses sort after it and only about 1 launch
+    /// in 22 gets the token0 order. Instead of launching until both appear, find a salt for each order first.
+    function _saltFor(bool wantToken0, string memory name, string memory symbol) internal view returns (bytes32 salt, address predicted) {
+        bytes32 initHash = keccak256(abi.encodePacked(type(ZerovaToken).creationCode, abi.encode(name, symbol, NPM)));
+        uint256 count = f.launchCount();
+        for (uint256 i; i < 20_000; ++i) {
+            salt = keccak256(abi.encode("fork", i));
+            bytes32 s2 = keccak256(abi.encode(address(this), salt, count));
+            predicted = address(uint160(uint256(keccak256(abi.encodePacked(bytes1(0xff), address(f), s2, initHash)))));
+            if ((predicted < WETH) == wantToken0) return (salt, predicted);
         }
-        require(seen0 && seen1, "both token orders");
+        revert("no salt found");
+    }
+
+    function test_launchBothOrders() public {
+        for (uint256 k; k < 2; ++k) {
+            bool want0 = k == 0;
+            (bytes32 salt, address predicted) = _saltFor(want0, "Fork Test", "FORK");
+            (uint256 id, address token) = f.launch{value: FEE}("Fork Test", "FORK", 3, 2, salt);
+            require(token == predicted, "token address as predicted");
+            require((token < WETH) == want0, "token order");
+            _check(id, token);
+        }
     }
 
     function test_tradeAndCollect() public {
