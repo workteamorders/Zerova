@@ -1,6 +1,6 @@
 # Demo script: ZEROVA on Robinhood Chain (one take)
 
-Site: `zerova-one.vercel.app`. Network: Robinhood Chain mainnet (chain 4663).
+Site: `zerova.tech`. Network: Robinhood Chain mainnet (chain 4663).
 The take makes one real launch: 0.0005 ETH plus gas, signed in your own wallet.
 
 ## Before you press record
@@ -13,7 +13,7 @@ The take makes one real launch: 0.0005 ETH plus gas, signed in your own wallet.
 
 ## Recording scenes (one take)
 
-1. **Open.** Go to `zerova-one.vercel.app`. Let the animated Z settle, move the pointer over it, click it once so it is rewritten.
+1. **Open.** Go to `zerova.tech`. Let the animated Z settle, move the pointer over it, click it once so it is rewritten.
 2. **How it works.** Scroll slowly past "One painting, four states" (0%, 50%, 100%, Sealed) and "How a launch works". Labels marked EXAMPLE are illustrations.
 3. **Gallery.** Scroll to the Gallery. It is empty because no coin has launched yet. Say that this take launches the first one.
 4. **Contracts.** Scroll to Contracts. Show the Factory, Enso, Renderer and Treasury rows and the line "No external audit yet". Click the Factory link and show the code page on Blockscout, then come back.
