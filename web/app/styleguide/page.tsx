@@ -206,7 +206,7 @@ export default function Styleguide() {
               <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true" style={{ marginTop: 'var(--s4)' }}><rect x="1.5" y="1.5" width="41" height="41" fill="none" stroke="#C4321F" strokeWidth="2" /><g fill="none" stroke="#C4321F" strokeWidth="2.4" strokeLinecap="square"><path d="M12 10 V34" /><path d="M12 10 H32 V31 Q32 34 28.5 33" /><path d="M22 10 V22" /><path d="M12 22 H32" /></g></svg>
             </div>
           </div>
-          <p className="note" style={{ marginTop: 'var(--s3)' }}>The brand circle is an illustration for the home page. Each coin&#8217;s own painting is its symbol, shown in the Enso section below.</p>
+          <p className="note" style={{ marginTop: 'var(--s3)' }}>The brushed Z is the brand mark and the home page art. Each coin&#8217;s own painting is its symbol, shown in the Enso section below.</p>
 
           <h3 className="sg-sub">Numbered entry</h3>
           <div className="stripi"><span className="no">01<span style={{ fontWeight: 300 }}> /</span></span><span><b>LIVE GALLERY</b><p>Browse the Enso of every coin launched here.</p></span></div>

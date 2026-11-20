@@ -16,7 +16,7 @@ export function HeroArt({ height = 520, rings = true }: { height?: number; rings
       const cx = W * .52, cy = H * .5, R = Math.min(W * .22, H * .3);
       Ink.mountains(x, W * .7, -H * .02, W * .3, H * .22, 9, 2, true); Ink.mountains(x, 0, H * .84, W * .4, H * .16, 7, 3, false);
       Ink.sun(x, cx + R * .86, cy - R * .82, R * .45, 3);
-      const e = new Ink.Enso(cx, cy, R, 11);
+      const e = new Ink.ZMark(cx, cy, R * .92, 11);
       const off = document.documentElement.dataset.motion === 'off' || matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (!animate || off) { e.paint(x, 1); setLit(12); return; }
       let t0 = 0; setLit(0);
@@ -30,15 +30,14 @@ export function HeroArt({ height = 520, rings = true }: { height?: number; rings
   }, []);
   return (
     <div>
-      <canvas ref={ref} style={{ width: '100%', height, display: 'block' }} role="img" aria-label="An ink circle painted in black and red, with a red sun and misty mountains. Illustration." />
+      <canvas ref={ref} style={{ width: '100%', height, display: 'block' }} role="img" aria-label="The letter Z brushed in black and red ink, with a red sun and misty mountains. Illustration." />
       {rings && (
         <div className="prog-s">
           <p className="lbl" style={{ color: 'var(--c-fg)' }}>Stroke Progression</p>
           <div className="rings">
-            {Array.from({ length: 12 }, (_, i) => { const k = i + 1, a = k / 12 * 2 * Math.PI - Math.PI / 2, ex = 12 + 9 * Math.cos(a), ey = 12 + 9 * Math.sin(a);
-              return (<figure key={k} className={k <= lit ? 'lit' : ''}><svg viewBox="0 0 24 24" aria-hidden="true"><circle className="bg" cx="12" cy="12" r="9" fill="none" strokeWidth="1" strokeDasharray="2 2.2" />
-                {k === 12 ? <circle className="arc" cx="12" cy="12" r="9" fill="none" strokeWidth="2.4" /> : <path className="arc" d={`M12 3 A9 9 0 ${k > 6 ? 1 : 0} 1 ${ex.toFixed(2)} ${ey.toFixed(2)}`} fill="none" strokeWidth="2.4" strokeLinecap="round" />}
-              </svg>{k}</figure>); })}
+            {Array.from({ length: 12 }, (_, i) => { const k = i + 1, d = 'M4 5.5 L20 4.5 L4.5 19 L20.5 18.5';
+              return (<figure key={k} className={k <= lit ? 'lit' : ''}><svg viewBox="0 0 24 24" aria-hidden="true"><path className="bg" d={d} fill="none" strokeWidth="1" strokeDasharray="1.6 2" strokeLinejoin="round" />
+                <path className="arc" d={d} fill="none" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" pathLength={12} strokeDasharray={`${k} 13`} /></svg>{k}</figure>); })}
           </div>
         </div>
       )}

@@ -1,5 +1,5 @@
 // @ts-nocheck
-/* Bristle-brush ink painter for the hero art and the live background. Browser only. Illustration, not the on-chain renderer. */
+/* Bristle-brush ink painter for the brand Z, sun, mountains and the live background. Browser only. Illustration, not the on-chain renderer. */
 var Ink=(function(){
 function rng(seed){var a=seed>>>0;return function(){a=(a+0x6D2B79F5)|0;var t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296}}
 function vnoise(r,n){var v=[];for(var i=0;i<n+2;i++)v.push(r());return function(x){x=((x%n)+n)%n;var i=Math.floor(x),f=x-i,s=f*f*(3-2*f);return v[i]*(1-s)+v[i+1]*s}}
@@ -70,7 +70,25 @@ Enso.prototype.paint=function(ctx,p){var self=this;
   this.passes.forEach(function(q){var b=q[0],a=(self.p-q[1])/(q[2]-q[1]),c=(p-q[1])/(q[2]-q[1]);a=Math.max(0,Math.min(1,a));c=Math.max(0,Math.min(1,c));if(c>a)b.draw(ctx,a,c)});
   if(p>=.92&&!this.spl){this.spl=true;var r=rng(this.seed+9);splatter(ctx,r,320,this.cx-this.R*.08,this.cy-this.R*.05,this.R*1.2,'24,22,20',.32,3.4*this.R/300);splatter(ctx,r,120,this.cx+this.R*.2,this.cy,this.R*1.18,'196,52,32',.22,3*this.R/300)}
   this.p=p;};
-return{Brush:Brush,Enso:Enso,sun:sun,mountains:mountains,splatter:splatter,rng:rng};
+/* the brand mark: a brushed Z. Black top bar and diagonal, red bottom bar with a dry flick, splatter around */
+function ZMark(cx,cy,R,seed,opt){opt=opt||{};var r=rng(seed),K=R/300,lw=opt.lw||1;
+  function q(x0,y0,x1,y1,x2,y2){return function(t){var u=1-t;return[u*u*x0+2*u*t*x1+t*t*x2,u*u*y0+2*u*t*y1+t*t*y2]}}
+  function swell(t,a,b){return (a+(1-a)*sm(t/.08))*(1-b*t)}
+  var top=new Brush({seed:seed+1,n:opt.n||180,steps:700,pt:q(cx-R*.92,cy-R*.72,cx-R*.05,cy-R*.86,cx+R*.84,cy-R*.8),
+    w:function(t){return R*.34*swell(t,.55,.25)*(t>.9?Math.pow(1-(t-.9)/.1,.5):1)},color:function(t,br){var v=br.dark?8:22+((br.off+1)*12|0);return[v,v-2,v-3]},dry0:.1,dry1:.36,alpha:.92,lwScale:K*1.3*lw,body:.8,bodyColor:[36,34,32]});
+  var diag=new Brush({seed:seed+2,n:opt.n||190,steps:800,pt:q(cx+R*.74,cy-R*.76,cx+R*.02,cy-R*.02,cx-R*.78,cy+R*.74),
+    w:function(t){return R*.36*swell(t,.5,.3)},color:function(t,br){var v=br.dark?8:24+((br.off+1)*12|0);return[v,v-2,v-3]},dry0:.14,dry1:.44,alpha:.92,lwScale:K*1.3*lw,body:.8,bodyColor:[38,36,34]});
+  var bot=new Brush({seed:seed+3,n:opt.n||170,steps:800,pt:q(cx-R*.86,cy+R*.78,cx+R*.02,cy+R*.92,cx+R*.9,cy+R*.7),
+    w:function(t){return R*.32*swell(t,.5,.45)*(t>.84?Math.pow(1-(t-.84)/.16,.7):1)},color:function(t,br){return br.dark?[140,26,18]:[200+((br.off*18)|0),52+((br.off*10)|0),32]},dry0:.14,dry1:.52,alpha:.93,lwScale:K*1.2*lw,body:.62,bodyColor:[192,48,30]});
+  var tail=new Brush({seed:seed+4,n:50,steps:400,pt:q(cx+R*.86,cy+R*.72,cx+R*1.08,cy+R*.62,cx+R*1.24,cy+R*.36),w:function(t){return R*.07*Math.pow(1-t,.8)},color:function(){return[180,40,26]},dry0:.35,dry1:.75,alpha:.85,lwScale:K*lw});
+  var flick=new Brush({seed:seed+5,n:44,steps:400,pt:q(cx-R*.95,cy-R*.7,cx-R*1.15,cy-R*.62,cx-R*1.3,cy-R*.4),w:function(t){return R*.05*Math.pow(1-t,.8)},color:function(){return[22,20,18]},dry0:.4,dry1:.75,alpha:.8,lwScale:K*lw});
+  this.passes=opt.mini?[[top,0,.33],[diag,.3,.66],[bot,.63,1]]:[[flick,0,.06],[top,.04,.34],[diag,.3,.66],[bot,.63,.94],[tail,.9,1]];
+  this.cx=cx;this.cy=cy;this.R=R;this.seed=seed;this.p=0;this.spl=!!opt.mini;}
+ZMark.prototype.paint=function(ctx,p){var self=this;
+  this.passes.forEach(function(q){var b=q[0],a=(self.p-q[1])/(q[2]-q[1]),c=(p-q[1])/(q[2]-q[1]);a=Math.max(0,Math.min(1,a));c=Math.max(0,Math.min(1,c));if(c>a)b.draw(ctx,a,c)});
+  if(p>=.92&&!this.spl){this.spl=true;var r=rng(this.seed+9);splatter(ctx,r,260,this.cx,this.cy,this.R*1.15,'24,22,20',.35,3.2*this.R/300);splatter(ctx,r,110,this.cx+this.R*.2,this.cy+this.R*.3,this.R*1.05,'196,52,32',.25,3*this.R/300)}
+  this.p=p;};
+return{Brush:Brush,Enso:Enso,ZMark:ZMark,sun:sun,mountains:mountains,splatter:splatter,rng:rng};
 })();
 
 export { Ink };
