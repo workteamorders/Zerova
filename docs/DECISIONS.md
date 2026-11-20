@@ -76,3 +76,10 @@ The owner chose the "Sumi" home page from a reference image and asked for it to 
 The owner was told these conflict with the spec and chose to use them anyway. These three rules no longer apply to the home page. All other spec rules stand, including the banned-copy list and the footer disclaimers.
 
 Also decided: the hero shows a brand ink circle (black and red); each coin's own painting is its symbol written in 12 strokes (option B).
+
+## Real wallet connection on the home page (2026-11-20)
+
+- The Sumi page connects to real browser wallets through EIP-6963 discovery, with `window.ethereum` as a fallback. It asks only for the account, the chain ID and the ETH balance. It holds no keys and sends no transaction.
+- Network values used for "add / switch network": chain ID 4663 (0x1237), name "Robinhood Chain", currency ETH, RPC https://rpc.mainnet.chain.robinhood.com, explorer https://robinhoodchain.blockscout.com. These match the values recorded above. The explorer choice is still the default from the earlier conflict note.
+- Launching stays closed: `FACTORY` in the page is empty because no ZEROVA contract exists or is deployed. The review step says so and its Launch button stays disabled.
+- Not included: WalletConnect (mobile QR). It needs a WalletConnect project ID that the owner has to create. Until then, phone users open the site inside their wallet app's browser.

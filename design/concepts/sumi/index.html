@@ -248,6 +248,16 @@ body.lock{overflow:hidden}
 .symin::placeholder{color:color-mix(in srgb,var(--fg) 28%,transparent)}
 .tip{pointer-events:none}.fxc{transform-box:fill-box;transform-origin:center}
 .linkbtn{background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:15px;color:var(--dim)}.linkbtn:hover{color:var(--fg)}
+#wpick{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(20,19,18,.38);opacity:0;transition:opacity .2s}#wpick.open{opacity:1}
+.wp-box{width:min(420px,calc(100% - 32px));background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:var(--s6);box-shadow:var(--shadow)}
+.wp-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--s5)}.wp-h h2{font-size:26px;margin:0}
+.wopt{display:flex;align-items:center;gap:var(--s4);width:100%;min-height:60px;padding:0 var(--s4);margin-bottom:var(--s2);border:1px solid var(--line);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-family:var(--fd);font-weight:600;font-size:17px;text-align:left}
+.wopt:hover{border-color:var(--fg)}.wopt img{border-radius:8px}.wic{width:32px;height:32px;border-radius:8px;background:var(--fg);display:block}
+#wmenu{position:fixed;z-index:70;top:84px;right:56px;width:320px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:var(--s5);box-shadow:var(--shadow)}
+.wm-addr{font-family:ui-monospace,Menlo,monospace;font-size:13px;word-break:break-all;margin:var(--s2) 0}.wm-bal{font-size:15px;color:var(--dim);margin-bottom:var(--s4)}
+.wm-act{display:flex;flex-wrap:wrap;gap:var(--s2)}.wm-act .btn{min-height:40px;padding:0 var(--s4);font-size:14px}
+#wallet.bad{border-color:var(--warn);color:var(--warn)}.fl-wal.bad{border-color:var(--warn);color:var(--warn)}
+@media (max-width:900px){#wmenu{right:12px;left:12px;width:auto;top:70px}}
 @media (max-width:1560px){.strip>a{grid-template-columns:auto 1fr 88px;gap:var(--s4);padding:0 var(--s5)}.strip canvas{width:88px;height:88px}.strip b{font-size:15px;letter-spacing:.16em;white-space:nowrap}.strip p{font-size:15px}.strip .no{font-size:34px}}
 @media (max-width:1180px){.sh-side{display:none}.prog{right:32px}}
 @media (max-width:900px){
@@ -380,12 +390,14 @@ body.lock{overflow:hidden}
   </div>
 </footer>
 <div id="toast" role="status" aria-live="polite"></div>
+<div id="wpick" role="dialog" aria-modal="true" aria-labelledby="wpT" hidden><div class="wp-box"><div class="wp-h"><h2 id="wpT">Connect a wallet</h2><button type="button" class="fl-ic" id="wpClose" aria-label="Close"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div><div id="wpList"></div><p class="note" style="margin-top:var(--s4)">Your wallet signs. This site never sees your keys and sends nothing without your approval in the wallet.</p></div></div>
+<div id="wmenu" hidden><p class="lbl" id="wmName">Wallet</p><p class="wm-addr" id="wmAddr"></p><p class="wm-bal"><span id="wmBal"></span> on Robinhood Chain</p><div class="wm-act"><button type="button" class="btn line" id="wmCopy">Copy address</button><a class="btn line" id="wmExp" target="_blank" rel="noopener">Explorer</a><button type="button" class="btn line" id="wmOut">Disconnect</button></div></div>
 
 <div id="flow" role="dialog" aria-modal="true" aria-labelledby="fq" hidden data-view="solo">
   <div class="fl-top">
     <button type="button" class="fl-ic" id="flBack" aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <div class="fl-prog"><span id="flStep" class="lbl">Step 1 of 6</span><div class="fl-bar"><i id="flBar"></i></div></div>
-    <span class="fl-wal" id="flWal"><span class="dot"></span>0x7a3F…9c21</span>
+    <span class="fl-wal" id="flWal"><span class="dot"></span>Not connected</span>
     <button type="button" class="fl-ic" id="flClose" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
   </div>
   <div class="fl-body">
@@ -761,23 +773,69 @@ var FL=[['Launched here','The factory has a pool recorded for this token.','pool
 $('flags').innerHTML=FL.map(function(f,i){return'<div class="flag rv" style="--d:'+(i*.12)+'s"><div class="t"><b>'+f[0]+'</b><small>'+f[1]+'</small></div><div class="v"><div><span>true</span><br><small>'+f[2]+'</small></div>'+tick1+'</div></div>'}).join('');
 document.querySelectorAll('.rv').forEach(function(el){rio.observe(el)});
 
-/* ---------- wallet (mock) ---------- */
-var connected=false,connecting=false,MOCKADDR='0x7a3F…9c21';
-var toastT=0;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on')},3800)}
+/* ---------- wallet (real: EIP-1193 / EIP-6963 browser wallets) ----------
+   The page only asks the wallet for the account, the chain and the balance. It holds no keys and sends nothing on its own.
+   Robinhood Chain values as recorded in docs/DECISIONS.md. */
+var CHAIN={id:4663,hex:'0x1237',name:'Robinhood Chain',rpc:'https://rpc.mainnet.chain.robinhood.com',explorer:'https://robinhoodchain.blockscout.com'};
+/* Set this to the deployed ZerovaFactory address. Empty means launching is closed. */
+var FACTORY='';
+var WALLETS=[],prov=null,provInfo=null,account=null,chainId=null,balanceWei=null,connecting=false,connected=false;
+var toastT=0;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('on')},4200)}
+function short(a){return a?a.slice(0,6)+'…'+a.slice(-4):''}
+function onChain(){return chainId&&parseInt(chainId,16)===CHAIN.id}
+function ethOf(wei){if(wei==null)return'…';var v=Number(BigInt(wei)*10000n/1000000000000000000n)/10000;return v.toLocaleString('en-US',{maximumFractionDigits:4})}
+window.addEventListener('eip6963:announceProvider',function(e){var d=e.detail;if(!d||!d.provider||!d.info)return;if(WALLETS.some(function(w){return w.info.uuid===d.info.uuid}))return;WALLETS.push(d)});
+window.dispatchEvent(new Event('eip6963:requestProvider'));
+function legacy(){var e=window.ethereum;if(!e)return[];var list=e.providers&&e.providers.length?e.providers:[e];
+  return list.map(function(p,i){var n=p.isRabby?'Rabby':p.isCoinbaseWallet?'Coinbase Wallet':p.isMetaMask?'MetaMask':'Browser wallet';return{info:{uuid:'legacy-'+i,name:n,icon:'',rdns:'legacy.'+n.toLowerCase().replace(/\s/g,'')},provider:p}})}
+function allWallets(){return WALLETS.length?WALLETS:legacy()}
 function walletUI(){
-  var w=$('wallet');w.classList.toggle('on',connected);w.classList.toggle('busy',connecting);
-  w.setAttribute('aria-pressed',connected?'true':'false');
-  $('walletL').textContent=connecting?'Connecting…':connected?MOCKADDR:'Connect Wallet';$('walletS').textContent=connecting?'…':connected?'0x7a3F…':'Connect';
-  w.title=connected?'Click to disconnect (mock wallet)':'Connect a wallet (mock in this prototype)';
-  $('heroNote').textContent=connected?'Connected: '+MOCKADDR+' (example wallet). Six short steps, then one transaction.':'';
-  if(F.step===5)renderStep(5,true);
+  var w=$('wallet');w.classList.toggle('on',connected&&onChain());w.classList.toggle('bad',connected&&!onChain());w.classList.toggle('busy',connecting);w.setAttribute('aria-pressed',connected?'true':'false');
+  $('walletL').textContent=connecting?'Connecting…':!connected?'Connect Wallet':!onChain()?'Wrong network':short(account);
+  $('walletS').textContent=connecting?'…':!connected?'Connect':!onChain()?'Network':short(account).slice(0,6);
+  w.title=!connected?'Connect a browser wallet':!onChain()?'Your wallet is on another network. Click to switch to Robinhood Chain.':'Connected with '+(provInfo?provInfo.name:'wallet')+'. Click for options.';
+  $('heroNote').textContent=connected?(onChain()?'Connected: '+short(account)+' on Robinhood Chain.':'Connected: '+short(account)+'. Switch your wallet to Robinhood Chain to launch.'):'';
+  var fw=$('flWal');if(fw){fw.innerHTML='<span class="dot"></span>'+(connected?(onChain()?short(account):'Wrong network'):'Not connected');fw.classList.toggle('bad',connected&&!onChain())}
+  if(typeof F!=='undefined'&&F.step===5)renderStep(5,true);
 }
-function connect(then){if(connected||connecting)return;connecting=true;walletUI();
-  setTimeout(function(){connecting=false;connected=true;walletUI();toast('Mock wallet connected. This prototype contacts no real wallet.');if(then)then()},motionOff?0:800)}
-function disconnect(){connected=false;walletUI();toast('Mock wallet disconnected.');if(!$('flow').hidden)closeFlow()}
-$('wallet').addEventListener('click',function(){connected?disconnect():connect()});
+function bind(p){if(p._zb)return;p._zb=true;
+  p.on&&p.on('accountsChanged',function(a){if(p!==prov)return;if(!a||!a.length){reset();toast('Wallet disconnected.');return}account=a[0];refreshBalance();walletUI()});
+  p.on&&p.on('chainChanged',function(c){if(p!==prov)return;chainId=c;refreshBalance();walletUI()});
+  p.on&&p.on('disconnect',function(){if(p!==prov)return;reset();walletUI()})}
+function reset(){connected=false;account=null;chainId=null;balanceWei=null;prov=null;provInfo=null;try{localStorage.removeItem('zerova.wallet')}catch(e){}walletUI()}
+function refreshBalance(){if(!prov||!account)return;prov.request({method:'eth_getBalance',params:[account,'latest']}).then(function(b){balanceWei=b;if(typeof F!=='undefined'&&F.step===5)renderStep(5,true)}).catch(function(){balanceWei=null})}
+function useWallet(w,then,silent){prov=w.provider;provInfo=w.info;bind(prov);connecting=!silent;walletUI();
+  prov.request({method:silent?'eth_accounts':'eth_requestAccounts'}).then(function(a){
+    if(!a||!a.length){connecting=false;if(silent){prov=null;provInfo=null}walletUI();return}
+    account=a[0];return prov.request({method:'eth_chainId'}).then(function(c){chainId=c;connecting=false;connected=true;try{localStorage.setItem('zerova.wallet',w.info.rdns)}catch(e){}
+      refreshBalance();walletUI();if(!silent)toast('Connected with '+w.info.name+'.'+(onChain()?'':' Switch to Robinhood Chain to launch.'));if(then)then()})
+  }).catch(function(err){connecting=false;prov=null;provInfo=null;walletUI();if(!silent)toast(err&&err.code===4001?'Connection cancelled in the wallet.':'The wallet did not connect. '+((err&&err.message)||''))})}
+function switchChain(){if(!prov)return Promise.resolve();
+  return prov.request({method:'wallet_switchEthereumChain',params:[{chainId:CHAIN.hex}]}).catch(function(err){
+    if(err&&(err.code===4902||(err.data&&err.data.originalError&&err.data.originalError.code===4902)))
+      return prov.request({method:'wallet_addEthereumChain',params:[{chainId:CHAIN.hex,chainName:CHAIN.name,nativeCurrency:{name:'Ether',symbol:'ETH',decimals:18},rpcUrls:[CHAIN.rpc],blockExplorerUrls:[CHAIN.explorer]}]});
+    if(err&&err.code===4001){toast('Network switch cancelled in the wallet.');return}
+    throw err}).then(function(){return prov.request({method:'eth_chainId'})}).then(function(c){if(c){chainId=c;refreshBalance();walletUI()}}).catch(function(err){toast('Could not switch network. '+((err&&err.message)||''))})}
+/* wallet picker */
+function picker(then){var m=$('wpick'),list=allWallets();
+  if(!list.length){$('wpList').innerHTML='<p class="fl-sub" style="margin:0 0 var(--s4)">No browser wallet was found. Install one, then reload this page. On a phone, open this page inside your wallet app&#8217;s browser.</p><div class="nav2"><a class="btn line" href="https://metamask.io/download/" target="_blank" rel="noopener">Get MetaMask</a><a class="btn line" href="https://rabby.io/" target="_blank" rel="noopener">Get Rabby</a></div>'}
+  else $('wpList').innerHTML=list.map(function(w,i){return'<button type="button" class="wopt" data-i="'+i+'">'+(w.info.icon?'<img src="'+esc(w.info.icon)+'" alt="" width="32" height="32">':'<span class="wic" aria-hidden="true"></span>')+'<span>'+esc(w.info.name)+'</span></button>'}).join('');
+  [].slice.call($('wpList').querySelectorAll('.wopt')).forEach(function(b){b.addEventListener('click',function(){closePicker();useWallet(list[+b.dataset.i],then,false)})});
+  m.hidden=false;requestAnimationFrame(function(){m.classList.add('open')});var f=m.querySelector('.wopt,.btn,#wpClose');f&&f.focus()}
+function closePicker(){var m=$('wpick');m.classList.remove('open');m.hidden=true}
+$('wpClose').addEventListener('click',closePicker);$('wpick').addEventListener('click',function(e){if(e.target===this)closePicker()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('wpick').hidden)closePicker()});
+function connect(then){if(connecting)return;if(connected){if(then)then();return}var list=allWallets();if(list.length===1){useWallet(list[0],then,false);return}picker(then)}
+function walletMenu(){if(!onChain()){switchChain();return}var m=$('wmenu');m.hidden=!m.hidden;
+  $('wmAddr').textContent=account;$('wmBal').textContent=ethOf(balanceWei)+' ETH';$('wmName').textContent=provInfo?provInfo.name:'Wallet';$('wmExp').href=CHAIN.explorer+'/address/'+account}
+$('wmCopy').addEventListener('click',function(){navigator.clipboard&&navigator.clipboard.writeText(account).then(function(){toast('Address copied.')})});
+$('wmOut').addEventListener('click',function(){$('wmenu').hidden=true;var p=prov;reset();if(p)p.request({method:'wallet_revokePermissions',params:[{eth_accounts:{}}]}).catch(function(){});toast('Disconnected from this site.');if(!$('flow').hidden)closeFlow()});
+document.addEventListener('click',function(e){var m=$('wmenu');if(!m.hidden&&!e.target.closest('#wmenu,#wallet'))m.hidden=true});
+$('wallet').addEventListener('click',function(){connected?walletMenu():connect()});
 $('heroCta').addEventListener('click',openFlow);
 $('launchTop').addEventListener('click',openFlow);
+/* reconnect quietly if this site was connected before (no prompt) */
+setTimeout(function(){var r=null;try{r=localStorage.getItem('zerova.wallet')}catch(e){}if(!r)return;var w=allWallets().filter(function(x){return x.info.rdns===r})[0];if(w)useWallet(w,null,true)},400);
 
 /* ---------- launch flow: one step per screen ---------- */
 var F={step:0,sym:'',name:'',g:0,pig:1,pv:12,pvd:false,written:false,sim:0,ack:false},fp=null;
@@ -874,14 +932,17 @@ function renderStep(n,keep){
       '<div><dt>You pay</dt><dd>0.0005 ETH plus gas, shown by your wallet after the transaction is simulated.</dd></div></dl>'+
       '<label class="ack"><input type="checkbox" id="fack"'+(F.ack?' checked':'')+'><span>I have read what this transaction does and the risks above. I understand there is no external audit yet.</span></label>'+
       '<div class="nav2" id="fsignrow"><button type="button" class="btn primary lg" id="fsign"><svg class="spin" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg><span id="fsignL"></span></button></div>'+
-      '<p class="status" role="status" aria-live="polite" id="fstat"></p><p class="note"><span class="mock">MOCK</span> No wallet is contacted and no transaction is sent from this page.</p>';
+      '<p class="status" role="status" aria-live="polite" id="fstat"></p><p class="note" id="fnote"></p>';
     if(!keep){fp.setSpec(fspec());fp.apply(0,false,!motionOff)}cap.innerHTML='<span class="ex">EXAMPLE</span> A new coin starts at 0 strokes: only the pencil underdrawing shows.';
-    function sUI(){var b=$('fsign'),L=$('fsignL'),st=$('fstat');$('fsignrow').classList.toggle('busy',F.sim>0);
-      if(!connected){L.textContent='Connect wallet to launch';b.disabled=false;st.textContent='Your wallet is disconnected.';return}
-      L.textContent=F.sim===0?'Launch '+F.sym:F.sim===1?'Simulating…':'Waiting for your signature…';b.disabled=!F.ack||F.sim!==0;
-      st.textContent=F.sim===0?(F.ack?'Ready. The transaction is simulated before your wallet is asked to sign.':'Tick the box above to continue.'):F.sim===1?'Simulating the transaction against the chain…':'Simulation passed. In the real product your wallet asks you to sign here.'}
+    function sUI(){var b=$('fsign'),L=$('fsignL'),st=$('fstat'),nt=$('fnote');$('fsignrow').classList.remove('busy');
+      nt.innerHTML='Wallet: '+(connected?esc(short(account))+(provInfo?' ('+esc(provInfo.name)+')':''):'not connected')+(connected&&onChain()?' · Balance: '+ethOf(balanceWei)+' ETH':'');
+      if(!connected){L.textContent='Connect wallet';b.disabled=false;st.textContent='Connect a wallet to continue.';return}
+      if(!onChain()){L.textContent='Switch to Robinhood Chain';b.disabled=false;st.textContent='Your wallet is on another network (chain '+(chainId?parseInt(chainId,16):'?')+').';return}
+      var need=500000000000000n;if(balanceWei!=null&&BigInt(balanceWei)<need){L.textContent='Not enough ETH';b.disabled=true;st.textContent='The launch fee is 0.0005 ETH plus gas. This wallet holds '+ethOf(balanceWei)+' ETH.';return}
+      if(!FACTORY){L.textContent='Launch '+F.sym;b.disabled=true;st.innerHTML='<b>Launching is not open yet.</b> The ZEROVA contracts are not deployed on Robinhood Chain. Nothing is sent from this page until they are.';return}
+      L.textContent='Launch '+F.sym;b.disabled=!F.ack;st.textContent=F.ack?'Ready.':'Tick the box above to continue.'}
     $('fack').addEventListener('change',function(){F.ack=this.checked;sUI()});
-    $('fsign').addEventListener('click',function(){if(!connected){connect();return}F.sim=1;sUI();setTimeout(function(){F.sim=2;sUI();setTimeout(function(){F.sim=0;F.ack=false;go(6)},1300)},1100)});
+    $('fsign').addEventListener('click',function(){if(!connected){connect(function(){renderStep(5,true)});return}if(!onChain()){switchChain();return}});
     sUI();if(!keep)$('fq').focus();return;
   }
   if(n>=6){
