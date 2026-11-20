@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useMemo, useRef } from 'react';
 import { color, pigments } from '@/lib/tokens';
-import { build, ensoSvg } from '@/lib/enso';
+import { buildSym, svgSym } from '@/lib/enso';
 
 type Props = {
   seed?: number; gesture?: number; pigment?: number; name?: string; symbol?: string; no?: string;
@@ -9,11 +9,11 @@ type Props = {
 };
 
 /** Illustrative painting. Marked EXAMPLE wherever it is shown. Not the on-chain renderer. */
-export function Enso({ seed = 33, gesture = 3, pigment = 4, name = 'Quiet Hours', symbol = 'QUIET', no = '7', strokes = 12, sealed = false, small = false }: Props) {
+export function Enso({ seed = 97, gesture = 0, pigment = 1, name = 'TIDE', symbol = 'TIDE', no = '7', strokes = 12, sealed = false, small = false }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const html = useMemo(() => {
     const p = pigments[pigment];
-    return ensoSvg(build(seed, gesture, small ? 10 : 20), { paper: color.paper, shade: color.shade, ink: p.ink, wash: p.wash, seal: p.seal }, name, symbol, no);
+    return svgSym(buildSym(symbol, seed, gesture), { paper: color.paper, shade: color.shade, ink: p.ink, wash: p.wash, seal: p.seal }, name, symbol, no);
   }, [seed, gesture, pigment, name, symbol, no, small]);
   useEffect(() => {
     const el = ref.current; if (!el) return;
@@ -21,5 +21,5 @@ export function Enso({ seed = 33, gesture = 3, pigment = 4, name = 'Quiet Hours'
     el.firstElementChild?.classList.toggle('done', sealed);
     const cnt = el.querySelector('.cnt'); if (cnt) cnt.textContent = `${strokes} of 12 strokes`;
   }, [html, strokes, sealed]);
-  return <div ref={ref} className="paint" role="img" aria-label={`Illustrative ink circle painting, ${strokes} of 12 strokes drawn${sealed ? ', completion seal stamped' : ''}, example only`} dangerouslySetInnerHTML={{ __html: html }} />;
+  return <div ref={ref} className="paint" role="img" aria-label={`Illustrative ink painting of the symbol ${symbol}, ${strokes} of 12 strokes drawn${sealed ? ', completion seal stamped' : ''}, example only`} dangerouslySetInnerHTML={{ __html: html }} />;
 }

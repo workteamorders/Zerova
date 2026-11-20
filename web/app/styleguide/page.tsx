@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { BRAND } from '@/config/brand';
 import { color, contrast, font, gestures, motion, pigments, radius, space, typeScale } from '@/lib/tokens';
 import { Enso } from '@/components/Enso';
+import { HeroArt } from '@/components/HeroArt';
 
 export const metadata: Metadata = { title: `Styleguide | ${BRAND.name}` };
 
@@ -14,6 +15,7 @@ const swatches: { key: keyof typeof color; use: string }[] = [
   { key: 'frame', use: 'Painting frame border' },
   { key: 'accent', use: 'Primary action, large emphasis' },
   { key: 'accentHover', use: 'Primary action, hover fill' },
+  { key: 'red', use: 'Ink red: paintings, sun, underline swash' },
   { key: 'onAccent', use: 'Text on the accent' },
   { key: 'warn', use: 'Errors and EXAMPLE or MOCK tags' },
   { key: 'off', use: 'Disabled fill' },
@@ -31,7 +33,8 @@ const pairs: { fg: keyof typeof color; bg: keyof typeof color; use: string; larg
   { fg: 'warn', bg: 'surface', use: 'Error text on a card' },
   { fg: 'onOff', bg: 'off', use: 'Disabled button label' },
   { fg: 'bg', bg: 'fg', use: 'Pressed chip, toast' },
-  { fg: 'accent', bg: 'bg', use: 'Italic display line only (24px and up)', large: true },
+  { fg: 'accent', bg: 'bg', use: 'Section numbers 01 / 02 / 03, active nav underline' },
+  { fg: 'red', bg: 'bg', use: 'Ink red: art only, never body text', large: true },
 ];
 
 const vocab: [string, string][] = [
@@ -61,7 +64,7 @@ export default function Styleguide() {
     <>
       <section className="blk" style={{ borderTop: 0 }}>
         <div className="wrap">
-          <p className="lbl">Design system · direction Mist</p>
+          <p className="lbl">Design system · direction Sumi</p>
           <h1 style={{ fontSize: 'clamp(40px,5.4vw,72px)', lineHeight: 1, margin: 'var(--s4) 0 var(--s5)' }}>Styleguide</h1>
           <p className="sub" style={{ marginBottom: 0 }}>Tokens, type, components and the voice of {BRAND.name}. Every value on this page is read from the same token file the site uses, including the contrast ratios, which are computed here.</p>
         </div>
@@ -118,7 +121,7 @@ export default function Styleguide() {
       <section className="blk" id="type">
         <div className="wrap">
           <h2 className="sg-h">Type</h2>
-          <p className="sub">Display: Fraunces, a soft serif, with italics for the second line of a headline. Body and labels: Figtree. Two families, no monospace.</p>
+          <p className="sub">Display: Inter Tight, heavy and tightly set. Body and labels: Inter; labels are capitals with wide letter spacing. Two families, no monospace.</p>
           <div style={{ display: 'grid', gap: 'var(--s5)' }}>
             {typeScale.map((t) => (
               <div key={t.name} style={{ display: 'grid', gridTemplateColumns: 'minmax(120px,160px) 1fr', gap: 'var(--s5)', alignItems: 'baseline', borderBottom: '1px solid var(--c-line)', paddingBottom: 'var(--s4)' }}>
@@ -127,8 +130,8 @@ export default function Styleguide() {
               </div>
             ))}
             <div style={{ display: 'grid', gridTemplateColumns: 'minmax(120px,160px) 1fr', gap: 'var(--s5)', alignItems: 'baseline' }}>
-              <div><b>Display pair</b><div className="sg-code">roman + italic accent</div></div>
-              <div style={{ fontFamily: font.display, fontSize: 'clamp(46px,6.6vw,92px)', lineHeight: 0.98, letterSpacing: '-.025em' }}>Start at 0.<br /><i style={{ color: 'var(--c-accent)', fontWeight: 400 }}>Close the circle.</i></div>
+              <div><b>Hero set</b><div className="sg-code">label + display + spaced line</div></div>
+              <div><p className="sk">The Art Launchpad on Robinhood Chain<i /></p><div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 'clamp(46px,6vw,92px)', lineHeight: 1.04, letterSpacing: '-.032em', margin: '16px 0 20px' }}>Every launch is<br />a work of art.</div><p className="sh-sub">One token. One Enso. Twelve strokes.</p></div>
             </div>
           </div>
         </div>
@@ -163,7 +166,7 @@ export default function Styleguide() {
       <section className="blk" id="motion">
         <div className="wrap">
           <h2 className="sg-h">Motion</h2>
-          <p className="sub">Only transform and opacity move. A brush stroke reveals along its path. The live background is the wind trails behind this page: it stops when the browser asks for reduced motion, when the tab is hidden, and from the Pause motion control in the footer.</p>
+          <p className="sub">Brush strokes reveal along their path. The live background behind this page has five layers: ink-wash mountains with flowing mist (parallax with pointer and scroll), great grey or red strokes painted across the wall, ink drops bleeding into the paper (a click drops one), drifting pigment that gathers into a circle, and an ink trail behind the pointer. Nothing is drawn over text, buttons or paintings. It stops for reduced motion, a hidden tab, the Studio, and the Pause motion control in the footer.</p>
           <table className="sg">
             <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
             <tbody>
@@ -183,14 +186,30 @@ export default function Styleguide() {
 
           <h3 className="sg-sub">Buttons</h3>
           <div className="sg-row">
-            <button className="btn primary" type="button">Launch a coin</button>
+            <button className="btn primary" type="button">Launch a Coin<svg className="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 L17 7 M9 7 H17 V15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
             <button className="btn primary is-hover" type="button">Hover</button>
             <button className="btn primary focus-demo" type="button">Focus</button>
             <button className="btn primary" type="button" disabled>Disabled</button>
-            <button className="btn ghost" type="button">How it works</button>
-            <button className="btn ghost is-hover" type="button">Hover</button>
-            <button className="btn primary lg" type="button">Large</button>
+            <button className="btn pill" type="button">Connect Wallet</button>
           </div>
+          <div className="sg-row" style={{ marginTop: 'var(--s4)' }}>
+            <button className="btn ink lg" type="button">Explore Gallery<svg className="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 H20 M14 6 L20 12 L14 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
+            <button className="btn ghost lg" type="button">Launch a Coin<svg className="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 L17 7 M9 7 H17 V15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
+          </div>
+
+          <h3 className="sg-sub">Brand art, seal and stroke progression</h3>
+          <div className="sg-row" style={{ alignItems: 'flex-start', gap: 'var(--s7)' }}>
+            <div style={{ flex: '1 1 520px', minWidth: 0 }}><HeroArt height={460} /></div>
+            <div style={{ flex: '0 0 240px', borderLeft: '1px solid color-mix(in srgb,var(--c-fg) 40%,transparent)', paddingLeft: 'var(--s6)' }}>
+              <p style={{ fontWeight: 600, fontSize: 24, letterSpacing: '.2em' }}>ENSŌ</p><p style={{ fontSize: 18, paddingBottom: 'var(--s4)', borderBottom: '1px solid color-mix(in srgb,var(--c-fg) 30%,transparent)', marginBottom: 'var(--s4)' }}>12 Strokes</p>
+              <p className="note" style={{ fontSize: 16 }}>A generative artwork that evolves with the token&#8217;s market price.</p>
+              <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true" style={{ marginTop: 'var(--s4)' }}><rect x="1.5" y="1.5" width="41" height="41" fill="none" stroke="#C4321F" strokeWidth="2" /><g fill="none" stroke="#C4321F" strokeWidth="2.4" strokeLinecap="square"><path d="M12 10 V34" /><path d="M12 10 H32 V31 Q32 34 28.5 33" /><path d="M22 10 V22" /><path d="M12 22 H32" /></g></svg>
+            </div>
+          </div>
+          <p className="note" style={{ marginTop: 'var(--s3)' }}>The brand circle is an illustration for the home page. Each coin&#8217;s own painting is its symbol, shown in the Enso section below.</p>
+
+          <h3 className="sg-sub">Numbered entry</h3>
+          <div className="stripi"><span className="no">01<span style={{ fontWeight: 300 }}> /</span></span><span><b>LIVE GALLERY</b><p>Browse the Enso of every coin launched here.</p></span></div>
 
           <h3 className="sg-sub">Wallet</h3>
           <div className="sg-row">
@@ -258,10 +277,10 @@ export default function Styleguide() {
 
       <section className="blk" id="enso">
         <div className="wrap">
-          <h2 className="sg-h">The Enso, four states</h2>
-          <p className="sub">One painting. Strokes follow the market and can come off. Only the completion seal is permanent. These are illustrations, not launched coins.</p>
+          <h2 className="sg-h">A coin&#8217;s Enso, four states</h2>
+          <p className="sub">The coin&#8217;s symbol, brushed in 12 strokes of equal ink length. At 0% only the pencil underdrawing shows. Strokes follow the market and can come off. Only the completion seal is permanent. These are illustrations, not launched coins.</p>
           <div className="sg-states">
-            {[{ n: 0, s: false, t: '0%', c: 'At launch price' }, { n: 6, s: false, t: '50%', c: '6 of 12 strokes' }, { n: 12, s: false, t: '100%', c: 'Closed, not yet recorded' }, { n: 12, s: true, t: 'Sealed', c: 'Completion recorded on-chain' }].map((x, i) => (
+            {[{ n: 0, s: false, t: '0%', c: 'At launch price' }, { n: 6, s: false, t: '50%', c: '6 of 12 strokes' }, { n: 12, s: false, t: '100%', c: 'Fully written, not yet recorded' }, { n: 12, s: true, t: 'Sealed', c: 'Completion recorded on-chain' }].map((x, i) => (
               <figure key={x.t} style={{ margin: 0 }}>
                 <div style={{ fontFamily: font.display, fontSize: 34, lineHeight: 1, marginBottom: 12 }}>{x.t}</div>
                 <div className="frame"><Enso small strokes={x.n} sealed={x.s} no={String(i + 1)} /></div>
@@ -273,7 +292,7 @@ export default function Styleguide() {
           <div className="sg-states" style={{ gridTemplateColumns: 'repeat(auto-fill,minmax(150px,1fr))', gap: 'var(--s4)' }}>
             {gestures.map((g, i) => (
               <figure key={g.id} style={{ margin: 0 }}>
-                <div className="frame" style={{ borderRadius: 16 }}><Enso small gesture={i} seed={21 + i * 7} pigment={i % 6} strokes={12} no={String(i + 1)} name={g.name} symbol={g.name.slice(0, 4).toUpperCase()} /></div>
+                <div className="frame"><Enso small gesture={i} seed={21 + i * 7} pigment={i % 6} strokes={12} no={String(i + 1)} name={['INK', 'TIDE', 'SLOW', 'KOI9', 'DUSK', 'REED', 'ASH8', 'VELA'][i]} symbol={['INK', 'TIDE', 'SLOW', 'KOI9', 'DUSK', 'REED', 'ASH8', 'VELA'][i]} /></div>
                 <figcaption style={{ paddingTop: 8, fontSize: 13 }}><b>{g.name}</b><div className="note">{g.note}</div></figcaption>
               </figure>
             ))}

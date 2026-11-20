@@ -1,22 +1,23 @@
 /**
- * Design tokens, direction "Mist". Single source: layout.tsx turns this object into CSS custom
+ * Design tokens, direction "Sumi" (chosen by the owner; replaces "Mist"). Single source: layout.tsx turns this object into CSS custom
  * properties, and the styleguide reads the same object, so the page cannot drift from the tokens.
  */
 export const color = {
-  bg: '#E7EDEE',
-  surface: '#F6F9F9',
-  fg: '#10222A',
-  dim: '#41575E',
-  line: '#C5D1D4',
-  frame: '#D3DDDF',
-  accent: '#C8401D',
-  accentHover: '#9F3015',
+  bg: '#EFE8DD',
+  surface: '#F7F2EA',
+  fg: '#141312',
+  dim: '#4C4741',
+  line: '#D6CCBE',
+  frame: '#DDD3C5',
+  accent: '#9E1B1B',
+  accentHover: '#7A1212',
   onAccent: '#FFFFFF',
-  warn: '#9F3015',
-  off: '#C5D1D4',
-  onOff: '#41575E',
-  paper: '#FAFBF8',
-  shade: '#7F9097',
+  red: '#C4321F',
+  warn: '#8E1A14',
+  off: '#D6CCBE',
+  onOff: '#4C4741',
+  paper: '#F7F1E6',
+  shade: '#8C8274',
 } as const;
 
 export const pigments = [
@@ -40,13 +41,13 @@ export const gestures = [
 ] as const;
 
 export const space = { s1: 4, s2: 8, s3: 12, s4: 16, s5: 24, s6: 32, s7: 48, s8: 64, s9: 104 } as const;
-export const radius = { card: 26, pill: 999, field: 14 } as const;
+export const radius = { card: 6, button: 4, pill: 999, field: 4 } as const;
 export const font = {
-  display: "'Fraunces', Georgia, serif",
-  body: "'Figtree', system-ui, sans-serif",
+  display: "'Inter Tight', 'Inter', system-ui, sans-serif",
+  body: "'Inter', system-ui, sans-serif",
 } as const;
 export const shadow = {
-  card: '0 2px 4px rgba(16,34,42,.05), 0 30px 60px -28px rgba(16,34,42,.3)',
+  card: '0 1px 2px rgba(20,19,18,.06), 0 20px 44px -24px rgba(20,19,18,.35)',
 } as const;
 export const motion = {
   easeOut: 'cubic-bezier(.22,.7,.2,1)',
@@ -57,12 +58,13 @@ export const motion = {
 } as const;
 
 export const typeScale = [
-  { name: 'Display', css: 'clamp(46px, 6.6vw, 92px)', family: 'display', weight: 500, sample: 'Start at 0.' },
-  { name: 'Heading 2', css: 'clamp(30px, 3.6vw, 46px)', family: 'display', weight: 500, sample: 'How a launch works' },
-  { name: 'Heading 3', css: '21px', family: 'display', weight: 500, sample: 'Choose' },
+  { name: 'Display', css: 'clamp(46px, 6vw, 92px)', family: 'display', weight: 800, sample: 'Every launch is a work of art.' },
+  { name: 'Heading 2', css: 'clamp(30px, 3.6vw, 46px)', family: 'display', weight: 800, sample: 'How a launch works' },
+  { name: 'Heading 3', css: '21px', family: 'display', weight: 700, sample: 'Choose' },
+  { name: 'Spaced line', css: 'clamp(18px, 1.55vw, 23px)', family: 'body', weight: 400, sample: 'One token. One Enso. Twelve strokes.' },
   { name: 'Body', css: '17px', family: 'body', weight: 400, sample: 'Every launch mints one token and one Enso.' },
-  { name: 'Small', css: '14px', family: 'body', weight: 400, sample: 'Name, symbol and painting cannot be changed.' },
-  { name: 'Label', css: '12px', family: 'body', weight: 700, sample: 'PERMISSIONLESS LAUNCHPAD' },
+  { name: 'Small', css: '14px', family: 'body', weight: 400, sample: 'Symbol, name and painting cannot be changed.' },
+  { name: 'Label', css: '14px', family: 'body', weight: 600, sample: 'THE ART LAUNCHPAD ON ROBINHOOD CHAIN' },
 ] as const;
 
 /** CSS custom properties for :root, generated from the tokens above. */
@@ -70,7 +72,7 @@ export function cssVars(): string {
   const v: string[] = [];
   for (const [k, val] of Object.entries(color)) v.push(`--c-${k.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())}:${val}`);
   for (const [k, val] of Object.entries(space)) v.push(`--${k}:${val}px`);
-  v.push(`--r:${radius.card}px`, `--rb:${radius.pill}px`, `--rs:${radius.field}px`);
+  v.push(`--r:${radius.card}px`, `--rb:${radius.button}px`, `--rp:${radius.pill}px`, `--rs:${radius.field}px`);
   v.push(`--font-display:${font.display}`, `--font-body:${font.body}`);
   v.push(`--shadow:${shadow.card}`);
   v.push(`--ease-out:${motion.easeOut}`, `--ease-brush:${motion.easeBrush}`);

@@ -8,6 +8,6 @@
  */
 export const BRAND = {
   name: 'ZEROVA',
-  tagline: 'Start at 0. Close the circle.',
+  tagline: 'Every launch is a work of art.',
   chain: 'Robinhood Chain',
 } as const;
