@@ -17,7 +17,7 @@ The take makes one real launch: 0.0005 ETH plus gas, signed in your own wallet.
 2. **How it works.** Scroll slowly past "One painting, four states" (0%, 50%, 100%, Sealed) and "How a launch works". Labels marked EXAMPLE are illustrations.
 3. **Gallery.** Scroll to the Gallery. It is empty because no coin has launched yet. Say that this take launches the first one.
 4. **Contracts.** Scroll to Contracts. Show the Factory, Enso, Renderer and Treasury rows and the line "No external audit yet". Click the Factory link and show the code page on Blockscout, then come back.
-5. **Connect.** Click Connect Wallet, choose your wallet in the list, approve. Show the short address in the header. If the button says Wrong network, click it and approve the switch to Robinhood Chain.
+5. **Connect.** Click Connect Wallet, choose your wallet in the list, approve. Show the short address in the header. Approve the switch to Robinhood Chain when the wallet asks. If you dismissed it, click the address in the header to ask again.
 6. **Studio, step 1.** Click Launch a Coin. Type the symbol and click Write it.
 7. **Studio, step 2.** Watch the 12 strokes write the symbol. Click Next: gesture.
 8. **Gesture and pigment.** Click two or three gestures to show the brush changing, choose one, click Next: pigment. Pick a pigment, click Next: preview.

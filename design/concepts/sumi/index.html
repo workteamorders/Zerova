@@ -1047,11 +1047,11 @@ function legacy(){var e=window.ethereum;if(!e)return[];var list=e.providers&&e.p
 function allWallets(){return WALLETS.length?WALLETS:legacy()}
 function walletUI(){
   var w=$('wallet');w.classList.toggle('on',connected&&onChain());w.classList.toggle('bad',connected&&!onChain());w.classList.toggle('busy',connecting);w.setAttribute('aria-pressed',connected?'true':'false');
-  $('walletL').textContent=connecting?'Connecting…':!connected?'Connect Wallet':!onChain()?'Wrong network':short(account);
-  $('walletS').textContent=connecting?'…':!connected?'Connect':!onChain()?'Network':short(account).slice(0,6);
+  $('walletL').textContent=connecting?'Connecting…':!connected?'Connect Wallet':short(account);
+  $('walletS').textContent=connecting?'…':!connected?'Connect':short(account).slice(0,6);
   w.title=!connected?'Connect a browser wallet':!onChain()?'Your wallet is on another network. Click to switch to Robinhood Chain.':'Connected with '+(provInfo?provInfo.name:'wallet')+'. Click for options.';
   $('heroNote').textContent=connected?(onChain()?'Connected: '+short(account)+' on Robinhood Chain.':'Connected: '+short(account)+'. Switch your wallet to Robinhood Chain to launch.'):'';
-  var fw=$('flWal');if(fw){fw.innerHTML='<span class="dot"></span>'+(connected?(onChain()?short(account):'Wrong network'):'Not connected');fw.classList.toggle('bad',connected&&!onChain())}
+  var fw=$('flWal');if(fw){fw.innerHTML='<span class="dot"></span>'+(connected?short(account):'Not connected');fw.classList.toggle('bad',connected&&!onChain())}
   if(typeof F!=='undefined'&&F.step===5)renderStep(5,true);
   collOnWallet();
 }
@@ -1065,7 +1065,7 @@ function useWallet(w,then,silent){prov=w.provider;provInfo=w.info;bind(prov);con
   prov.request({method:silent?'eth_accounts':'eth_requestAccounts'}).then(function(a){
     if(!a||!a.length){connecting=false;if(silent){prov=null;provInfo=null}walletUI();return}
     account=a[0];return prov.request({method:'eth_chainId'}).then(function(c){chainId=c;connecting=false;connected=true;try{localStorage.setItem('zerova.wallet',w.info.rdns)}catch(e){}
-      refreshBalance();walletUI();if(!silent)toast('Connected with '+w.info.name+'.'+(onChain()?'':' Switch to Robinhood Chain to launch.'));if(then)then()})
+      refreshBalance();walletUI();if(!silent)toast('Connected with '+w.info.name+'.'+(onChain()?'':' Approve the switch to Robinhood Chain.'));if(!silent&&!onChain())switchChain();if(then)then()})
   }).catch(function(err){connecting=false;prov=null;provInfo=null;walletUI();if(!silent)toast(err&&err.code===4001?'Connection cancelled in the wallet.':'The wallet did not connect. '+((err&&err.message)||''))})}
 function switchChain(){if(!prov)return Promise.resolve();
   return prov.request({method:'wallet_switchEthereumChain',params:[{chainId:CHAIN.hex}]}).catch(function(err){
